@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        
         /* NUMMER-INPUT: Pfeile ausblenden */
         input[type="text"]::-webkit-inner-spin-button,
         input[type="text"]::-webkit-outer-spin-button {
@@ -658,7 +659,47 @@
         }
     </style>
 </head>
+<style>
+  :root {
+    --font-from: 18;
+    --font-to: 20;
+    --vw-from: calc(1920 / 100);
+    --vw-to: calc(2400 / 100);
+    --coefficient: calc((var(--font-to) - var(--font-from)) / (var(--vw-to) - var(--vw-from)));
+    --base: calc((var(--font-from) - var(--vw-from) * var(--coefficient)) / 16);
+  }
 
+  html {
+    font-size: calc(var(--base) * 1rem + var(--coefficient) * 1vw);
+  }
+
+  @media screen and (max-width: 1920px) {
+    :root {
+      --font-from: 16;
+      --font-to: 18;
+      --vw-from: calc(1440 / 100);
+      --vw-to: calc(1920 / 100);
+      }
+  }
+
+  @media screen and (max-width: 1440px) {
+    :root {
+      --font-from: 12;
+      --font-to: 15;
+      --vw-from: calc(479 / 100);
+      --vw-to: calc(1440 / 100);
+      }
+  }
+
+  @media screen and (max-width: 479px) {
+    :root {
+      --font-from: 12;
+      --font-to: 16;
+      --vw-from: calc(1 / 100);
+      --vw-to: calc(479 / 100);
+      }
+  }
+</style>
 <body class="bg-gray-50">
     <div id="root"></div>
     <script type="text/babel">
@@ -1610,7 +1651,7 @@
                 },
                 {
                     id: 8,
-                    label: 'Weiterverarbeitung',
+                    label: 'Veredelung',
                     show: formData.bindeart === 'wire-o'
                         ? (formData.bezugsmaterialDeckblatt && formData.bezugsmaterialRueckblatt)
                         : formData.bindeart?.startsWith('broschuere')
@@ -1637,7 +1678,7 @@
                 },
                 {
                     id: 11,
-                    label: 'Zusammenfassung',
+                    label: 'Übersicht',
                     show: currentStep >= 10 ||
                         (formData.bindeart?.startsWith('softcover') && currentStep >= 9) ||
                         (formData.bindeart === 'wire-o' && currentStep >= 9) ||
