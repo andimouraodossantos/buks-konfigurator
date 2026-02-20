@@ -10,7 +10,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        
         /* NUMMER-INPUT: Pfeile ausblenden */
         input[type="text"]::-webkit-inner-spin-button,
         input[type="text"]::-webkit-outer-spin-button {
@@ -576,8 +575,10 @@
         }
 
         .bg-white.rounded-lg.shadow.p-4.mb-6.sticky.top-0.z-40 {
-            background-color: white !important
+            background-color: white !important;
+
         }
+
 
         .sticky.top-24.max-h-\[calc\(100vh-120px\)\].overflow-y-auto.bg-white {
             background-color: #ffffff !important;
@@ -660,46 +661,47 @@
     </style>
 </head>
 <style>
-  :root {
-    --font-from: 18;
-    --font-to: 20;
-    --vw-from: calc(1920 / 100);
-    --vw-to: calc(2400 / 100);
-    --coefficient: calc((var(--font-to) - var(--font-from)) / (var(--vw-to) - var(--vw-from)));
-    --base: calc((var(--font-from) - var(--vw-from) * var(--coefficient)) / 16);
-  }
-
-  html {
-    font-size: calc(var(--base) * 1rem + var(--coefficient) * 1vw);
-  }
-
-  @media screen and (max-width: 1920px) {
     :root {
-      --font-from: 16;
-      --font-to: 18;
-      --vw-from: calc(1440 / 100);
-      --vw-to: calc(1920 / 100);
-      }
-  }
+        --font-from: 18;
+        --font-to: 20;
+        --vw-from: calc(1920 / 100);
+        --vw-to: calc(2400 / 100);
+        --coefficient: calc((var(--font-to) - var(--font-from)) / (var(--vw-to) - var(--vw-from)));
+        --base: calc((var(--font-from) - var(--vw-from) * var(--coefficient)) / 16);
+    }
 
-  @media screen and (max-width: 1440px) {
-    :root {
-      --font-from: 12;
-      --font-to: 15;
-      --vw-from: calc(479 / 100);
-      --vw-to: calc(1440 / 100);
-      }
-  }
+    html {
+        font-size: calc(var(--base) * 1rem + var(--coefficient) * 1vw);
+    }
 
-  @media screen and (max-width: 479px) {
-    :root {
-      --font-from: 12;
-      --font-to: 16;
-      --vw-from: calc(1 / 100);
-      --vw-to: calc(479 / 100);
-      }
-  }
+    @media screen and (max-width: 1920px) {
+        :root {
+            --font-from: 16;
+            --font-to: 18;
+            --vw-from: calc(1440 / 100);
+            --vw-to: calc(1920 / 100);
+        }
+    }
+
+    @media screen and (max-width: 1440px) {
+        :root {
+            --font-from: 12;
+            --font-to: 15;
+            --vw-from: calc(479 / 100);
+            --vw-to: calc(1440 / 100);
+        }
+    }
+
+    @media screen and (max-width: 479px) {
+        :root {
+            --font-from: 12;
+            --font-to: 16;
+            --vw-from: calc(1 / 100);
+            --vw-to: calc(479 / 100);
+        }
+    }
 </style>
+
 <body class="bg-gray-50">
     <div id="root"></div>
     <script type="text/babel">
@@ -935,7 +937,11 @@
                 label: 'Bezugsmaterial',
                 step: 6,
                 group: 'cover',
-                getValue: (fd) => fd.bezugsmaterial
+                getValue: (fd) => {
+                    // ✅ Wire-O zeigt KEINE Bezugsmaterial (hat separate Felder)
+                    if (fd.bindeart === 'wire-o') return null;
+                    return fd.bezugsmaterial;
+                }
             },
 
             bezugsmaterialDeckblatt: {
@@ -1635,12 +1641,16 @@
                 { id: 5, label: 'Bindung', show: formData.seitenzahl, group: 'binding' },
                 {
                     id: 6,
-                    label: 'Buchdecke',
+                    label: formData.bindeart === 'wire-o'
+                        ? 'Deckblatt'
+                        : (formData.bindeart?.startsWith('softcover') || formData.bindeart?.startsWith('broschuere'))
+                            ? 'Umschlag'
+                            : 'Buchdecke',
                     show: formData.bindeart === 'wire-o'
                         ? formData.ringfarbe
                         : formData.bindeart === 'broschuere-rueckstich'
-                            ? formData.anzahlKlammern  // ← Broschüre Rückstich: braucht nur Klammern
-                            : formData.ausfuehrung,  // ← ALLE ANDEREN: brauchen Ausführung
+                            ? formData.anzahlKlammern
+                            : formData.ausfuehrung,
                     group: 'cover'
                 },
                 {
@@ -1737,7 +1747,7 @@
 
                         {/* ✅ 1. STEP PILLS (sticky) - JETZT ZUERST */}
                         {currentStep > 1 && (
-                            <div className="p-4 mb-6 sticky top-0 z-40 white-bg-top">
+                            <div className="p-4 mb-6 sticky top-0 z-40 white-bg-top border-bottom-black">
                                 <div className="flex items-center gap-4">
                                     <button
                                         onClick={() => setCurrentStep(currentStep - 1)}
@@ -1931,22 +1941,36 @@
             const [a, setA] = useState(formData.anmerkungen?.step2 || '');
             const formate = formData.bindeart === 'pappebuch'
                 ? [
-                    '245 x 340 mm',
-                    '235 x 315 mm',
-                    '210 x 297 mm',
-                    'A4 Hoch 210 x 297 mm',
-                    'A4 Quer 297 x 210 mm',
-                    'A5 Hoch 210 x 148 mm',
-                    'A5 Quer 148 x 210 mm',
-                    '160 x 220 mm',
-                    '225 x 225 mm',
-                    '170 x 170 mm',
-                    '160 x 160 mm'
+                    '245 × 340 mm',
+                    '235 × 315 mm',
+                    '210 × 297 mm',
+                    'A4 Hoch (210 × 297 mm)',
+                    'A4 Quer (297 × 210 mm)',
+                    'A5 Hoch (148 × 210 mm)',
+                    'A5 Quer (210 × 148 mm)',
+                    '160 × 220 mm',
+                    '225 × 225 mm',
+                    '170 × 170 mm',
+                    '160 × 160 mm'
                 ]
                 : [
-                    'A4 Hoch (210×297mm)', 'A4 Quer (297×210mm)', 'A5 Hoch (210×148mm)', 'A5 Quer (148×210mm)', 'A6 Hoch (105×148mm)', 'A6 Quer (148×105mm)',
-                    'DIN LANG Hoch (105×210mm)', 'DIN LANG Quer (210×105mm)', 'US Format (215,9×279,4mm)', 'Quadrat (297×297mm)', 'Quadrat (210×210mm)', 'Quadrat (148×148mm)',
-                    '170×240mm', '170×210mm', '155×220mm', '135×205mm', '125×190mm'
+                    'A4 Hoch (210 × 297 mm)',
+                    'A4 Quer (297 × 210 mm)',
+                    'A5 Hoch (148 × 210 mm)',
+                    'A5 Quer (210 × 148 mm)',
+                    'A6 Hoch (105 × 148 mm)',
+                    'A6 Quer (148 × 105 mm)',
+                    'DIN LANG Hoch (105 × 210 mm)',
+                    'DIN LANG Quer (210 × 105 mm)',
+                    'US Format (215,9 × 279,4 mm)',
+                    'Quadrat (297 × 297 mm)',
+                    'Quadrat (210 × 210 mm)',
+                    'Quadrat (148 × 148 mm)',
+                    '170 × 240 mm',
+                    '170 × 210 mm',
+                    '155 × 220 mm',
+                    '135 × 205 mm',
+                    '125 × 190 mm'
                 ];
 
             return (
@@ -3152,7 +3176,7 @@
 
             return (
                 <div className="step-card">
-                    <h2 className="text-2xl font-bold mb-6">{stepLabel} - {coverLabel}</h2>
+                    <h2 className="text-2xl font-bold mb-6">{stepLabel}</h2>
 
                     {formData.bindeart?.startsWith('broschuere') && (
                         <TwoColumnField label="Ausführung Umschlag" required>
@@ -3981,13 +4005,13 @@
             const druckVorsatzOpts = [
                 { id: 'Unbedruckt', name: 'Unbedruckt' },
                 { id: '1/0', name: '1/0' },
-                { id: '2/0 (Schwarz + HKS/Pantone)', name: '2/0 (Schwarz + HKS/Pantone)' },
-                { id: '4/0 (CMYK)', name: '4/0 (CMYK)' },
-                { id: '5/0 (CMYK + HKS/Pantone)', name: '5/0 (CMYK + HKS/Pantone)' },
-                { id: '1/1 (Flatterseite bedruckt)', name: '1/1 (Flatterseite bedruckt)' },
-                { id: '2/2 (Schwarz + HKS/Pantone, Flatterseite bedruckt)', name: '2/2 (Schwarz + HKS/Pantone, Flatterseite bedruckt)' },
-                { id: '4/4 (CMYK, Flatterseite bedruckt)', name: '4/4 (CMYK, Flatterseite bedruckt)' },
-                { id: '5/5 (CMYK + HKS/Pantone, Flatterseite bedruckt)', name: '5/5 (CMYK + HKS/Pantone, Flatterseite bedruckt)' }
+                { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
+                { id: '4/0 CMYK', name: '4/0 CMYK' },
+                { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' },
+                { id: '1/1 Flatterseite bedruckt', name: '1/1 Flatterseite bedruckt' },
+                { id: '2/2 Schwarz + HKS/Pantone, Flatterseite bedruckt', name: '2/2 Schwarz + HKS/Pantone, Flatterseite bedruckt' },
+                { id: '4/4 CMYK, Flatterseite bedruckt', name: '4/4 CMYK, Flatterseite bedruckt' },
+                { id: '5/5 CMYK + HKS/Pantone, Flatterseite bedruckt', name: '5/5 CMYK + HKS/Pantone, Flatterseite bedruckt' }
             ];
 
             return (
@@ -4380,13 +4404,13 @@
             const druckSchutzumschlagOpts = [
                 { id: 'Unbedruckt', name: 'Unbedruckt' },
                 { id: '1/0', name: '1/0' },
-                { id: '2/0 (Schwarz + HKS/Pantone)', name: '2/0 (Schwarz + HKS/Pantone)' },
-                { id: '4/0 (CMYK)', name: '4/0 (CMYK)' },
-                { id: '5/0 (CMYK + HKS/Pantone)', name: '5/0 (CMYK + HKS/Pantone)' },
-                { id: '1/1', name: '1/1' },
-                { id: '2/2 (Schwarz + HKS/Pantone)', name: '2/2 (Schwarz + HKS/Pantone)' },
-                { id: '4/4 (CMYK)', name: '4/4 (CMYK)' },
-                { id: '5/5 (CMYK + HKS/Pantone)', name: '5/5 (CMYK + HKS/Pantone)' }
+                { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
+                { id: '4/0 CMYK', name: '4/0 CMYK' },
+                { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' },
+                { id: '1/1 (Schwarz)', name: '1/1 (Schwarz)' },
+                { id: '2/2 Schwarz + HKS/Pantone', name: '2/2 Schwarz + HKS/Pantone' },
+                { id: '4/4 CMYK', name: '4/4 CMYK' },
+                { id: '5/5 CMYK + HKS/Pantone', name: '5/5 CMYK + HKS/Pantone' }
             ];
 
             return (
