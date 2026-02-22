@@ -968,6 +968,16 @@
                 }
             },
 
+            bezugsmaterialAnmerkung: {
+                label: 'Anmerkung zum Material',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (fd.bindeart === 'wire-o') return null;
+                    return fd.bezugsmaterialAnmerkung;
+                }
+            },
+
             bezugsmaterialDeckblatt: {
                 label: 'Bezugsmaterial Deckblatt',
                 step: 6,
@@ -1000,6 +1010,104 @@
                 step: 6,
                 group: 'cover',
                 getValue: (fd) => fd.bezugsmaterialRueckblatt
+            },
+
+            grammaturDeckblatt: {
+                label: 'Grammatur Deckblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.grammaturDeckblatt ? fd.grammaturDeckblatt + 'g' : null
+            },
+            druckDeckblatt: {
+                label: 'Druck Deckblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.druckDeckblatt
+            },
+            dispersionslackDeckblatt: {
+                label: 'Dispersionslack Deckblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.dispersionslackDeckblatt
+            },
+            folienkaschierungDeckblatt: {
+                label: 'Folienkaschierung Deckblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (!fd.folienkaschierungDeckblatt || fd.folienkaschierungDeckblatt !== 'ja') return fd.folienkaschierungDeckblatt;
+                    return fd.folienkaschierungDeckblattTyp || 'Ja';
+                }
+            },
+            lackierungDeckblatt: {
+                label: 'Lackierung Deckblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (!fd.lackierungDeckblatt || fd.lackierungDeckblatt !== 'ja') return fd.lackierungDeckblatt;
+                    return fd.lackierungDeckblattTyp || 'Ja';
+                }
+            },
+            praegungDeckblatt: {
+                label: 'Prägung Deckblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (!fd.praegungDeckblatt || fd.praegungDeckblatt !== 'ja') return fd.praegungDeckblatt;
+                    return fd.praegungDeckblattTyp || 'Ja';
+                }
+            },
+            deckfolie: {
+                label: 'Deckfolie',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.deckfolie
+            },
+            grammaturRueckblatt: {
+                label: 'Grammatur Rückblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.grammaturRueckblatt ? fd.grammaturRueckblatt + 'g' : null
+            },
+            druckRueckblatt: {
+                label: 'Druck Rückblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.druckRueckblatt
+            },
+            dispersionslackRueckblatt: {
+                label: 'Dispersionslack Rückblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => fd.dispersionslackRueckblatt
+            },
+
+            folienkaschierungRueckblatt: {
+                label: 'Folienkaschierung Rückblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (!fd.folienkaschierungRueckblatt || fd.folienkaschierungRueckblatt !== 'ja') return fd.folienkaschierungRueckblatt;
+                    return fd.folienkaschierungRueckblattTyp || 'Ja';
+                }
+            },
+            lackierungRueckblatt: {
+                label: 'Lackierung Rückblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (!fd.lackierungRueckblatt || fd.lackierungRueckblatt !== 'ja') return fd.lackierungRueckblatt;
+                    return fd.lackierungRueckblattTyp || 'Ja';
+                }
+            },
+            praegungRueckblatt: {
+                label: 'Prägung Rückblatt',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (!fd.praegungRueckblatt || fd.praegungRueckblatt !== 'ja') return fd.praegungRueckblatt;
+                    return fd.praegungRueckblattTyp || 'Ja';
+                }
             },
 
             durchgefaerbterKartonFarbeRueckblatt: {
@@ -1052,7 +1160,15 @@
                 group: 'cover',
                 getValue: (fd) => fd.druckBuchdecke
             },
-
+            druckPappebuchZusatz: {
+                label: 'Druck Zusatzoption',
+                step: 6,
+                group: 'cover',
+                getValue: (fd) => {
+                    if (fd.bindeart !== 'pappebuch') return null;
+                    return fd.druckPappebuchZusatz;
+                }
+            },
             dispersionslackBuchdecke: {
                 label: (fd) => {
                     const isWireO = fd.bindeart === 'wire-o';
@@ -1308,6 +1424,16 @@
                 }
             },
 
+            lackierungSchutzumschlagAnmerkung: {
+                label: 'Lackierung Anmerkung',
+                step: 9,
+                group: 'finishing',
+                getValue: (fd) => {
+                    if (fd.schutzumschlag !== 'ja' || fd.lackierungSchutzumschlag !== 'ja') return null;
+                    return fd.lackierungSchutzumschlagAnmerkung;
+                }
+            },
+
             praegungSchutzumschlag: {
                 label: 'Prägung Schutzumschlag',
                 step: 9,
@@ -1494,27 +1620,42 @@
                 beratungFarbraster: '', papier: [], papierSeitenzahlen: {}, papierEingabeTyp: {}, papierGrammatur: {}, papierIndividuell: {}, farbschnitt: '', farbschnittTyp: '', buchecken: '',
                 ausfuehrung: '', alternativeExemplare: '', alternativeExemplareVarianten: [{ name: '', anzahl: '' }], beratungAufschlag: '', garnfarbe: '', garnfarbeCustom: '',
                 kapitalbandFarbe: '', kapitalbandCustom: '', lesebaendchenFarbe: '', lesebaendchenCustom: '',
-                farbeFaelzelband: '', farbeFaelzelbandCustom: '', bezugsmaterial: '', bezugsmaterialCustom: '', druckBuchdecke: '', dispersionslackBuchdecke: '',
+                farbeFaelzelband: '', farbeFaelzelbandCustom: '', bezugsmaterial: '', bezugsmaterialCustom: '', bezugsmaterialAnmerkung: '', druckBuchdecke: '', dispersionslackBuchdecke: '',
                 folienkaschierung: '', folienkaschierungTyp: '', lackierung: '', lackierungTyp: '', praegung: '', praegungTyp: '', buchruecken: '',
                 vorsatzTyp: '', vorsatzPapier: '', druckVorsatz: '', druckVorsatzTyp: '', dispersionslackVorsatz: '',
                 einschweissen: '', banderolieren: '', konfektionieren: '', konfektionierenBeschreibung: '', einlegen: '', einlegenTyp: '', einlegenBeschreibung: '',
                 gummiband: '', gummibandFarbe: '', gummibandCustom: '',
                 schutzumschlag: '', schutzumschlagMaterial: '', druckSchutzumschlag: '', druckSchutzumschlagTyp: '',
+                folienkaschierungSchutzumschlag: '', folienkaschierungSchutzumschlagTyp: '',
+                lackierungSchutzumschlag: '', lackierungSchutzumschlagTyp: '', lackierungSchutzumschlagAnmerkung: '',
+                praegungSchutzumschlag: '', praegungSchutzumschlagTyp: '',
                 druckdatenkorrektur: '', probeseiten: '', farbproof: '', druckdatenerstellung: '', vorabexemplar: '', formproof: '',
                 firma: '', nachname: '', vorname: '', email: '', telefon: '', liefertermin: '', strasse: '', plz: '', ort: '',
                 beratungGewuenscht: false, datenschutzAkzeptiert: false, anmerkungen: {},
                 druckInnen: '', druckInnenTyp: '', dispersionslackInnen: '', klappenAmUmschlag: '', klappenTyp: '',
                 durchgefaerbterKartonFarbe: '', durchgefaerbterKartonFarbeFreitext: '',
                 ringfarbe: '',
+
+                // Wire-O neue Felder
                 bezugsmaterialDeckblatt: '', durchgefaerbterKartonFarbeDeckblatt: '', durchgefaerbterKartonFarbeFreitextDeckblatt: '',
+                grammaturDeckblatt: '', kartonAnmerkungDeckblatt: '',
+                druckDeckblatt: '', dispersionslackDeckblatt: '',
+                folienkaschierungDeckblatt: '', folienkaschierungDeckblattTyp: '',
+                lackierungDeckblatt: '', lackierungDeckblattTyp: '', lackierungDeckblattAnmerkung: '',
+                praegungDeckblatt: '', praegungDeckblattTyp: '',
+                deckfolie: '',
+
                 bezugsmaterialRueckblatt: '', durchgefaerbterKartonFarbeRueckblatt: '', durchgefaerbterKartonFarbeFreitextRueckblatt: '',
+                grammaturRueckblatt: '', kartonAnmerkungRueckblatt: '',
+                druckRueckblatt: '', dispersionslackRueckblatt: '',
                 folienkaschierungRueckblatt: '', folienkaschierungRueckblattTyp: '',
-                lackierungRueckblatt: '', lackierungRueckblattTyp: '',
+                lackierungRueckblatt: '', lackierungRueckblattTyp: '', lackierungRueckblattAnmerkung: '',
                 praegungRueckblatt: '', praegungRueckblattTyp: '',
+
                 registerstanzung: '', registerstanzungWunsch: '', registerstanzungTyp: '',
                 klammerfarbe: '', anzahlKlammern: '', umschlagAusfuehrung: '',
                 aufkleber: '', aufkleberGroesse: '', aufkleberAnbringen: '', aufkleberForm: '', aufkleberMaterial: '', aufkleberFarbigkeit: '',
-                karton: '', spacer: '', spacerFarbig: '', stanzungBuchdecke: '', stanzungTyp: '',
+                karton: '', spacer: '', spacerFarbig: '', stanzungBuchdecke: '', stanzungTyp: '', druckPappebuchZusatz: '',
                 gestanzteKlappen: '', stanzenPappebuch: '', stanzenPappebuchBeschreibung: ''
             });
 
@@ -1532,110 +1673,327 @@
 
             // 🔥 ZENTRALE BILD-KONFIGURATION - ALLE BILDER
             const BILDER = {
-                bindearten: {
-                    'hardcover-klebebindung': './Bilder/bindearten/hardcover-klebebindung.jpg',
-                    'hardcover-fadenheftung': './Bilder/bindearten/hardcover-fadenheftung.jpg',
-                    'softcover-klebebindung': './Bilder/bindearten/softcover-klebebindung.jpg',
-                    'softcover-fadenheftung': './Bilder/bindearten/softcover-fadenheftung.jpg',
-                    'wire-o': './Bilder/bindearten/wire-o.jpg',
-                    'broschuere-rueckstich': './Bilder/bindearten/broschuere-rueckstich.jpg',
-                    'broschuere-faden': './Bilder/bindearten/broschuere-faden.jpg',
-                    'pappebuch': './Bilder/bindearten/pappebuch.jpg'
-                },
-                formate: { default: './Bilder/papier/papier.jpg' },
-                druck: {
-                    'unbedruckt': './Bilder/druck/unbedruckt.jpg',
-                    '1-1': './Bilder/druck/1-1.jpg',
-                    '2-2': './Bilder/druck/2-2.jpg',
-                    '4-4': './Bilder/druck/4-4.jpg',
-                    '5-5': './Bilder/druck/5-5.jpg'
-                },
-                papier: {
-                    'Naturpapier': './Bilder/papier/papier.jpg',
-                    'Bilderdruck matt': './Bilder/papier/papier.jpg',
-                    'Bilderdruck glänzend': './Bilder/papier/papier.jpg',
-                    'Werkdruckpapier white': './Bilder/papier/papier.jpg',
-                    'Werkdruckpapier cream': './Bilder/papier/papier.jpg',
-                    'Munken Familia': './Bilder/papier/papier.jpg',
-                    'Gardapat Familie': './Bilder/papier/papier.jpg',
-                    'Recyclingpapiere': './Bilder/papier/papier.jpg'
-                },
-                karton: {
-                    'GC1 300g Reinweiss': './Bilder/papier/papier.jpg',
-                    'GC2 300g gelblich weiss': './Bilder/papier/papier.jpg',
-                    'GD2 Chromoduplexkarton aus Recycelten Papier': './Bilder/papier/papier.jpg',
-                    'Kraftkarton aus recyceltem Papier': './Bilder/papier/papier.jpg'
-                },
-                farbschnitt: { default: './Bilder/papier/papier.jpg' },
-                buchecken: {
-                    'eckig': './Bilder/papier/papier.jpg',
-                    'rund': './Bilder/papier/papier.jpg'
-                },
-                farbraum: { default: './Bilder/papier/papier.jpg' },
-                ausfuehrung: { default: './Bilder/papier/papier.jpg' },
-                ringfarbe: { default: './Bilder/papier/papier.jpg' },
-                klammerfarbe: { default: './Bilder/papier/papier.jpg' },
-                anzahlKlammern: { default: './Bilder/papier/papier.jpg' },
-                garnfarbe: { default: './Bilder/papier/papier.jpg' },
-                kapitalband: { default: './Bilder/papier/papier.jpg' },
-                lesebaendchen: { default: './Bilder/papier/papier.jpg' },
-                faelzelband: { default: './Bilder/papier/papier.jpg' },
-                bezugsmaterial: {
-                    'Papierbezug Bilderdruckpapier': './Bilder/papier/papier.jpg',
-                    'Überzugsmaterial (z.B. Surbalin)': './Bilder/papier/papier.jpg',
-                    'Gewebeeinband (z.B. Leinen)': './Bilder/papier/papier.jpg',
-                    'Halbgewebeeinband + Papierbezug': './Bilder/papier/papier.jpg',
-                    'Bilderdruckpapier matt': './Bilder/papier/papier.jpg',
-                    'Bilderdruckpapier glänzend': './Bilder/papier/papier.jpg',
-                    'Naturpapier weiß': './Bilder/papier/papier.jpg',
-                    'Recycling-Naturpapier': './Bilder/papier/papier.jpg',
-                    'Recycling Bilderdruckpapier': './Bilder/papier/papier.jpg',
-                    'Chromokarton (GC)': './Bilder/papier/papier.jpg',
-                    'Zellstoffkarton': './Bilder/papier/papier.jpg',
-                    'Durchgefärbter Karton': './Bilder/papier/papier.jpg',
-                    'Chromokarton reinweiß': './Bilder/papier/papier.jpg',
-                    'Graukarton 400g': './Bilder/papier/papier.jpg'
-                },
-                umschlagAusfuehrung: { default: './Bilder/papier/papier.jpg' },
-                druckBuchdecke: { default: './Bilder/papier/papier.jpg' },
-                druckInnen: { default: './Bilder/papier/papier.jpg' },
-                klappen: { default: './Bilder/papier/papier.jpg' },
-                folie: { default: './Bilder/papier/papier.jpg' },
-                lackierung: { default: './Bilder/papier/papier.jpg' },
-                praegung: { default: './Bilder/papier/papier.jpg' },
-                spacer: { default: './Bilder/papier/papier.jpg' },
-                gestanzteKlappen: { default: './Bilder/papier/papier.jpg' },
-                stanzen: { default: './Bilder/papier/papier.jpg' },
-                stanzung: {
-                    'Beispielfoto 1': './Bilder/papier/papier.jpg',
-                    'Beispielfoto 2': './Bilder/papier/papier.jpg',
-                    'Beispielfoto 3': './Bilder/papier/papier.jpg'
-                },
-                buchruecken: { default: './Bilder/papier/papier.jpg' },
-                vorsatz: { default: './Bilder/papier/papier.jpg' },
-                vorsatzPapier: { default: './Bilder/papier/papier.jpg' },
-                druckVorsatz: { default: './Bilder/papier/papier.jpg' },
-                registerstanzung: { default: './Bilder/papier/papier.jpg' },
-                einlegen: { default: './Bilder/papier/papier.jpg' },
-                gummiband: { default: './Bilder/papier/papier.jpg' },
-                aufkleber: { default: './Bilder/papier/papier.jpg' },
-                aufkleberForm: {
-                    'Rund': './Bilder/papier/papier.jpg',
-                    'Eckig': './Bilder/papier/papier.jpg'
-                },
-                aufkleberMaterial: {
-                    'Offsetpapier': './Bilder/papier/papier.jpg',
-                    'Papier matt kaschiert': './Bilder/papier/papier.jpg',
-                    'Papier glänzend kaschiert': './Bilder/papier/papier.jpg'
-                },
-                aufkleberFarbigkeit: {
-                    '1/0': './Bilder/papier/papier.jpg',
-                    '4/0 CMYK': './Bilder/papier/papier.jpg'
-                },
-                schutzumschlag: { default: './Bilder/papier/papier.jpg' },
-                druckSchutzumschlag: { default: './Bilder/papier/papier.jpg' },
-                default: './Bilder/papier/papier.jpg'
-            };
+    // ==================== BINDEARTEN ====================
+    bindearten: {
+        'hardcover-klebebindung': './Bilder/bindearten/hardcover-klebebindung.jpg',
+        'hardcover-fadenheftung': './Bilder/bindearten/hardcover-fadenheftung.jpg',
+        'softcover-klebebindung': './Bilder/bindearten/softcover-klebebindung.jpg',
+        'softcover-fadenheftung': './Bilder/bindearten/softcover-fadenheftung.jpg',
+        'wire-o': './Bilder/bindearten/wire-o.jpg',
+        'broschuere-rueckstich': './Bilder/bindearten/broschuere-rueckstich.jpg',
+        'broschuere-faden': './Bilder/bindearten/broschuere-faden.jpg',
+        'pappebuch': './Bilder/bindearten/pappebuch.jpg'
+    },
+
+    // ==================== FORMATE ====================
+    formate: {
+        'A4 Hoch (210 × 297 mm)': './Bilder/formate/01_Din_Format_210_x_297_mm.jpg',
+        'A4 Quer (297 × 210 mm)': './Bilder/formate/02_Din_Format_297_x_210_mm.jpg',
+        'A5 Hoch (148 × 210 mm)': './Bilder/formate/03_Din_Format_148_x_210_mm.jpg',
+        'A5 Quer (210 × 148 mm)': './Bilder/formate/04_Din_Format_210_x_148_mm.jpg',
+        'A6 Hoch (105 × 148 mm)': './Bilder/formate/05_Din_Format_105_x_148_mm.jpg',
+        'A6 Quer (148 × 105 mm)': './Bilder/formate/06_Din_Format_148_x_105_mm.jpg',
+        'DIN LANG Hoch (105 × 210 mm)': './Bilder/formate/07_Din_Format_105_x_210_mm.jpg',
+        'DIN LANG Quer (210 × 105 mm)': './Bilder/formate/08_Din_Format_210_x_105_mm.jpg',
+        'US Format (215,9 × 279,4 mm)': './Bilder/formate/09_US_Format-215_9_x_279_40_mm.jpg',
+        'Quadrat (297 × 297 mm)': './Bilder/formate/10_QF_297_x_297_mm.jpg',
+        'Quadrat (210 × 210 mm)': './Bilder/formate/11_QF_210_x_210_mm.jpg',
+        'Quadrat (148 × 148 mm)': './Bilder/formate/12_QF_148_x_148_mm.jpg',
+        '170 × 240 mm': './Bilder/formate/13_Verlagsformat_170_x_240_mm.jpg',
+        '170 × 210 mm': './Bilder/formate/14_Verlagsformat_170_x_210_mm.jpg',
+        '155 × 220 mm': './Bilder/formate/15_Verlagsformat_155_x_220_mm.jpg',
+        '135 × 205 mm': './Bilder/formate/16_Verlagsformat_135_x_205_mm.jpg',
+        '125 × 190 mm': './Bilder/formate/17_Verlagsformat_125_x_190_mm.jpg',
+        '245 × 340 mm': './Bilder/formate/01_Pappebuch_245_x_340_mm.jpg',
+        '235 × 315 mm': './Bilder/formate/02_Pappebuch_235_x_315_mm.jpg',
+        '210 × 297 mm': './Bilder/formate/03_Pappebuch_Din_Format_210_x_297_mm.jpg',
+        '297 × 210 mm': './Bilder/formate/04_Pappebuch_Din_Format_297_x_210_mm.jpg',
+        '148 × 210 mm': './Bilder/formate/05_Pappebuch_Din_Format_148_x_210_mm.jpg',
+        '210 × 148 mm': './Bilder/formate/06_appebuch_Din_Format_210_x_148_mm.jpg',
+        '160 × 220 mm': './Bilder/formate/07_Pappebuch_Verlagsformat_160_x_220_mm.jpg',
+        '225 × 225 mm': './Bilder/formate/08_Pappebuch_Quadratisches_Format_225_x_225_mm_.jpg',
+        '170 × 170 mm': './Bilder/formate/09_appebuch_Quadratisches_Format_170_x_170_mm.jpg',
+        '160 × 160 mm': './Bilder/formate/10_Pappebuch_Quadratisches_Format_160_x_160_mm_.jpg',
+        default: './Bilder/formate/01_Din_Format_210_x_297_mm.jpg'
+    },
+
+    // ==================== DRUCK ====================
+    druck: {
+        'unbedruckt': './Bilder/druck/Innen_Druck_Unbedruckt.jpg',
+        '1-1': './Bilder/druck/Innen_Druck_1_1.jpg',
+        '2-2': './Bilder/druck/Innen_Druck_2_2.jpg',
+        '4-4': './Bilder/druck/Innen_Druck_4_0_CMYK.jpg',
+        '5-5': './Bilder/druck/Innen_Druck_5_0_CMYK_Pantone.jpg'
+    },
+
+    papier: {
+        'Naturpapier': './Bilder/papier/Papier_Naturpapier.jpg',
+        'Bilderdruck matt': './Bilder/papier/Papier_Bilderdruck_matt.jpg',
+        'Bilderdruck glänzend': './Bilder/papier/Papier_Bilderdruck_glaenzend.jpg',
+        'Werkdruckpapier white': './Bilder/papier/Papier_Werkpapier_White.jpg',
+        'Werkdruckpapier cream': './Bilder/papier/Papier_Werkpapier_Creme.jpg',
+        'Munken Familia': './Bilder/papier/Papier_Munken.jpg',
+        'Gardapat Familie': './Bilder/papier/Papier_GardaPat.jpg',
+        'Recyclingpapiere': './Bilder/papier/Papier_Recyclingpapiere.jpg'
+    },
+
+    karton: {
+        'GC1 300g Reinweiss': './Bilder/karton/Pappebuch_GC1_300g_Reinweiss.jpg',
+        'GC2 300g gelblich weiss': './Bilder/karton/Pappebuch_GC2_300g_gelblich_weiss.jpg',
+        'GD2 Chromoduplexkarton aus Recycelten Papier': './Bilder/karton/Pappebuch_GD2_Chromoduplexkarton_aus_Recycelten_Papier.jpg',
+        'Kraftkarton aus recyceltem Papier': './Bilder/karton/Pappebuch_Kraftkarton_aus_recyceltem_Papier.jpg'
+    },
+
+    farbschnitt: {
+        'Ohne Farbschnitt (Standard)': './Bilder/farbschnitt/Farbschnitt_Ohne.jpg',
+        'Einfarbig CMYK': './Bilder/farbschnitt/Farbschnitt_einfarbig_CMYK.jpg',
+        'Einfarbig HKS/Pantone': './Bilder/farbschnitt/Farbschnitt_HKS_Pantone.jpg',
+        'Motiv CMYK': './Bilder/farbschnitt/Farbschnitt_Motiv_CMYK.jpg',
+        'Folienschnitt': './Bilder/farbschnitt/Farbschnitt_Folienschnitt_Gold.jpg',
+        default: './Bilder/farbschnitt/Farbschnitt_Ohne.jpg'
+    },
+
+    buchecken: {
+        'eckig': './Bilder/buchecken/Buchecken_Eckig.jpg',
+        'rund': './Bilder/buchecken/Buchecken_Rund.jpg'
+    },
+
+    farbraum: {
+        'hexachrome': './Bilder/druck/Innen_Druck_Hexachrome.jpg',
+        'multicolor': './Bilder/druck/Innen_Druck_Multicolor.jpg',
+        default: './Bilder/papier/papier.jpg'
+    },
+
+    ausfuehrung: {
+        'Klassisches Hardcover (Standard)': './Bilder/ausfuehrung/Ausfuehrung_Hardcover_Klebebindung.jpg',
+        'Flexcover': './Bilder/ausfuehrung/Ausfuehrung_Flexcover.jpg',
+        'Steifbroschur mit Fälzelband': './Bilder/ausfuehrung/Ausfuehrung_Steifbroschur_mit_Faelzelband.jpg',
+        'Schweizer Broschur mit Fälzelband': './Bilder/ausfuehrung/Ausfuehrung_Schweizer_Broschur_mit_Faelzelband.jpg',
+        'Schweizer Broschur mit offener Fadenheftung': './Bilder/ausfuehrung/Ausfuehrung_Schweizer_Broschur_mit_offener_Fadenheftung.jpg',
+        'Steifbroschur mit offener Fadenheftung': './Bilder/ausfuehrung/Ausfuehrung_Steifbroschur_mit_offener_Fadenheftung.jpg',
+        'Klassisches Softcover': './Bilder/ausfuehrung/Ausfuehrung_Softcover_Klebebindung.jpg',
+        'Fälzelband Broschur': './Bilder/ausfuehrung/Ausfuehrung_Faelzelband_Broschur.jpg',
+        'OTA Bindung Freirückenbroschur': './Bilder/ausfuehrung/Ausfuehrung_OTA_Bindung_Freirueckenbroschur.jpg',
+        'Englische Broschur Softcover mit Schutzumschlag': './Bilder/ausfuehrung/Ausfuehrung_Englische_Broschur_Softcover_mit_Schutzumschlag.jpg',
+        'Japan Broschur': './Bilder/ausfuehrung/Ausfuehrung_Japan_Broschur.jpg',
+        'Schweizer Broschur mit Fälzelaband': './Bilder/ausfuehrung/Ausfuehrung_Schweizer_Broschur_mit_Faelzelaband.jpg',
+        'Offene Fadenheftung': './Bilder/ausfuehrung/Ausfuehrung_Offene_Fadenheftung.jpg',
+        'Steppstichheftung': './Bilder/ausfuehrung/Ausfuehrung_Broschuere_mit_Fadenheftung.jpg',
+        'Fadenknotenheftung': './Bilder/ausfuehrung/Ausfuehrung_Fadenknotenheftung.jpg',
+        'Layflatbindung (Integralbindung)': './Bilder/ausfuehrung/Ausfuehrung_Layflatbindung_Integralbindung_.jpg',
+        'Layflatbindung, Hardcover (Integralbindung)': './Bilder/ausfuehrung/Layflatbindung_Hardcover_Integralbindung_IMG_6516_web.jpg',
+        default: './Bilder/ausfuehrung/Ausfuehrung_Hardcover_Klebebindung.jpg'
+    },
+
+    ringfarbe: { default: './Bilder/papier/papier.jpg' },
+    
+    klammerfarbe: {
+        'Silber': './Bilder/klammern/Klammern_2K_Silber.jpg',
+        'Weiß': './Bilder/klammern/Klammern_2K_Weiss.jpg',
+        'Gelb': './Bilder/klammern/Klammern_2K_Gelb.jpg',
+        'Blau': './Bilder/klammern/Klammern_2K_Blau.jpg',
+        default: './Bilder/klammern/Klammern_2K_Silber.jpg'
+    },
+    
+    anzahlKlammern: {
+        '2': './Bilder/klammern/Klammern_2K.jpg',
+        '3': './Bilder/klammern/Klammern_3K.jpg',
+        '4': './Bilder/klammern/Klammern_4K.jpg',
+        default: './Bilder/klammern/Klammern_2K.jpg'
+    },
+
+    garnfarbe: {
+        'Schwarz': './Bilder/garnfarbe/Garnfarbe_Schwarz.jpg',
+        'Weiß': './Bilder/garnfarbe/Garnfarbe_Weiss.jpg',
+        'Rot': './Bilder/garnfarbe/Garnfarbe_Rot.jpg',
+        'Grün': './Bilder/garnfarbe/Garnfarbe_Gruen.jpg',
+        default: './Bilder/garnfarbe/Garnfarbe_Schwarz.jpg'
+    },
+
+    kapitalband: {
+        'Ohne Kapitalband': './Bilder/kapitalband/Kapitalband_Ohne.jpg',
+        'Weiß (Standard)': './Bilder/kapitalband/Kapitalband_Weiss.jpg',
+        'Schwarz': './Bilder/kapitalband/Kapitalband_Schwarz.jpg',
+        'Rot': './Bilder/kapitalband/Kapitalband_Rot.jpg',
+        'PDF Download': './Bilder/papier/papier.jpg',
+        default: './Bilder/kapitalband/Kapitalband_Weiss.jpg'
+    },
+
+    lesebaendchen: {
+        'Ohne Lesebändchen': './Bilder/lesebaendchen/Lesebaendchen_Ohne.jpg',
+        'Weiß (Standard)': './Bilder/lesebaendchen/Lesebaendchen_Weiss.jpg',
+        'Schwarz': './Bilder/lesebaendchen/Lesebaendchen_Schwarz.jpg',
+        'Rot': './Bilder/lesebaendchen/Lesebaendchen_Rot.jpg',
+        'PDF Download': './Bilder/papier/papier.jpg',
+        default: './Bilder/lesebaendchen/Lesebaendchen_Weiss.jpg'
+    },
+
+    faelzelband: {
+        'Weiß (Standard)': './Bilder/faelzelband/Faelzelband_Weiss.jpg',
+        'Schwarz': './Bilder/faelzelband/Faelzelband_Schwarz.jpg',
+        'Rot': './Bilder/faelzelband/Faelzelband_Rot.jpg',
+        'Braun': './Bilder/faelzelband/Faelzelband_Braun.jpg',
+        'PDF Download': './Bilder/papier/papier.jpg',
+        default: './Bilder/faelzelband/Faelzelband_Weiss.jpg'
+    },
+
+    bezugsmaterial: {
+        'Papierbezug Bilderdruckpapier': './Bilder/bezugsmaterial/01_Papierbezug_Bilderdruckpapier.jpg',
+        'Überzugsmaterial (z.B. Surbalin)': './Bilder/bezugsmaterial/02_Ueberzugsmaterial_z.B._Surbalin_.jpg',
+        'Gewebeeinband (z.B. Leinen)': './Bilder/bezugsmaterial/03_Gewebeeinband_z.B._Leinen_.jpg',
+        'Halbgewebeeinband + Papierbezug': './Bilder/bezugsmaterial/04_Halbgewebeeinband_Papierbezug.jpg',
+        'Bilderdruckpapier matt': './Bilder/papier/Papier_Bilderdruck_matt.jpg',
+        'Bilderdruckpapier glänzend': './Bilder/papier/Papier_Bilderdruck_glaenzend.jpg',
+        'Naturpapier weiß': './Bilder/papier/Papier_Naturpapier.jpg',
+        'Recycling-Naturpapier': './Bilder/papier/Papier_Recyclingpapiere.jpg',
+        'Recycling Bilderdruckpapier': './Bilder/papier/Papier_Recyclingpapiere.jpg',
+        'Chromokarton (GC)': './Bilder/karton/Pappebuch_GC1_300g_Reinweiss.jpg',
+        'Zellstoffkarton': './Bilder/karton/Pappebuch_GC1_300g_Reinweiss.jpg',
+        'Durchgefärbter Karton': './Bilder/durchgefaerbterkarton/Farbiger_Karton_Navy.jpg',
+        'Chromokarton reinweiß': './Bilder/karton/Pappebuch_GC1_300g_Reinweiss.jpg',
+        'Graukarton 400g': './Bilder/karton/Pappebuch_GD2_Chromoduplexkarton_aus_Recycelten_Papier.jpg'
+    },
+
+    durchgefaerbterkarton: {
+        'Navy': './Bilder/durchgefaerbterkarton/Farbiger_Karton_Navy.jpg',
+        'Rosé': './Bilder/durchgefaerbterkarton/Farbiger_Karton_Ros_.jpg',
+        'Tomatenrot': './Bilder/durchgefaerbterkarton/Farbiger_Karton_Tomatenrot.jpg',
+        'Bordeaux': './Bilder/durchgefaerbterkarton/Farbiger_Karton_Bordeaux.jpg'
+    },
+
+    umschlagAusfuehrung: {
+        '4 Seiten Standard': './Bilder/ausfuehrung/01_Bindeart_Broschuere_mit_Rueckstichheftung.jpg',
+        '6 Seiten (Klappe Vorne)': './Bilder/ausfuehrung/02_Umschlag_mit_6_Seiten_Klappe_Vorne_.jpg',
+        '6 Seiten (Klappe Hinten)': './Bilder/ausfuehrung/03_Umschlag_mit_6_Seiten_Klappe_Hinten_.jpg',
+        '8 Seiten (Klappe Vorne und Hinten)': './Bilder/ausfuehrung/04_Umschlag_mit_8_Seiten_Klappe_Vorne_und_Hinten_MG_7025_web.jpg',
+        default: './Bilder/ausfuehrung/Ausfuehrung_Softcover_Klebebindung.jpg'
+    },
+
+    druckBuchdecke: {
+        'Unbedruckt': './Bilder/druck/Druck_Unbedruckt.jpg',
+        '1/0': './Bilder/druck/Druck_1_0.jpg',
+        '2/0': './Bilder/druck/Druck_2_0.jpg',
+        '4/0 CMYK': './Bilder/druck/Druck_4_0_CMYK.jpg',
+        '5/0 CMYK + HKS/Pantone': './Bilder/druck/Druck_5_0_CMYK_Pantone.jpg',
+        default: './Bilder/druck/Druck_4_0_CMYK.jpg'
+    },
+
+    druckInnen: { default: './Bilder/druck/Innen_Druck_4_0_CMYK.jpg' },
+    
+    klappen: {
+        'Klappe Vorne': './Bilder/klappen/01_Klappe_Vorne.jpg',
+        'Klappe Hinten': './Bilder/klappen/02_Klappe_Hinten.jpg',
+        'Klappen Vorne- und Hinten': './Bilder/klappen/03_Klappen_Vorne-_und_Hinten.jpg',
+        default: './Bilder/klappen/01_Klappe_Vorne.jpg'
+    },
+
+    folie: {
+        'Matte Folie': './Bilder/folienkaschierung/Folienkaschierung_Matt.jpg',
+        'Matte Folie kratzfest': './Bilder/folienkaschierung/Folienkaschierung_Matt_Kratzfest.jpg',
+        'Softtouchfolie': './Bilder/folienkaschierung/Folienkaschierung_Softtouche.jpg',
+        'Folie mit Leinenoptik': './Bilder/folienkaschierung/Folienkaschierung_Leinen.jpg',
+        'Folie mit Lederoptik': './Bilder/folienkaschierung/Folienkaschierung_Leder.jpg',
+        default: './Bilder/folienkaschierung/Folienkaschierung_Matt.jpg'
+    },
+
+    lackierung: {
+        'Dispersionslack glänzend': './Bilder/lackierung/Lackierung_Glaenzend.jpg',
+        'Dispersionslack matt': './Bilder/lackierung/Lackierung_Matt.jpg',
+        'Spotlack': './Bilder/lackierung/Lackierung_Spot.jpg',
+        '3D Lack': './Bilder/lackierung/Lackierung_3D_Lack.jpg',
+        'Glitzerlack Silber': './Bilder/lackierung/Lackierung_Silber_Glitzer.jpg',
+        'Glitzerlack Gold': './Bilder/lackierung/Lackierung_Gold.jpg',
+        'Duftlack': './Bilder/lackierung/Lackierung_Duft.jpg',
+        default: './Bilder/lackierung/Lackierung_Glaenzend.jpg'
+    },
+
+    praegung: {
+        'Flachprägung mit Folie': './Bilder/praegung/Praegung_Flach_Folie.jpg',
+        'Tiefprägung Blind': './Bilder/praegung/Praegung_Tief_Blind.jpg',
+        'Tiefprägung mit Folie': './Bilder/praegung/Praegung_Tief_Folie.jpg',
+        'Hochprägung Blind': './Bilder/praegung/Praegung_Hoch_Blind.jpg',
+        'Hochprägung mit Folie': './Bilder/praegung/Praegung_Hoch_Folie.jpg',
+        default: './Bilder/praegung/Praegung_Flach_Folie.jpg'
+    },
+
+    buchruecken: {
+        'Gerader Buchrücken (Standard)': './Bilder/buchruecken/01_Gerader_Buchruecken_Standard_.jpg',
+        'Runder Buchrücken': './Bilder/buchruecken/02_Runder_Buchruecken.jpg',
+        'Kastenrücken': './Bilder/buchruecken/03_Kastenruecken.jpg',
+        default: './Bilder/buchruecken/01_Gerader_Buchruecken_Standard_.jpg'
+    },
+
+    vorsatz: {
+        'Integriert': './Bilder/vorsatz/Integrierter_Vor-_und_Nachsatz.jpg',
+        'Standard': './Bilder/vorsatz/Papier_Naturpapier_Weiss.jpg',
+        default: './Bilder/vorsatz/Papier_Naturpapier_Weiss.jpg'
+    },
+    
+    vorsatzPapier: {
+        'Naturpapier Weiss': './Bilder/vorsatz/Papier_Naturpapier_Weiss.jpg',
+        'Naturpapier Weiss gerippt': './Bilder/vorsatz/Papier_Naturpapier_Weiss_gerippt.jpg',
+        'Naturpapier Creme': './Bilder/vorsatz/Papier_Naturpapier_Creme.jpg',
+        'Naturpapier Creme gerippt': './Bilder/vorsatz/Papier_Naturpapier_Creme_gerippt.jpg',
+        'Naturpapier Schwarz': './Bilder/vorsatz/Papier_Naturpapier_Schwarz.jpg',
+        'Naturpapier Schwarz gerippt': './Bilder/vorsatz/Papier_Naturpapier_Schwarz_gerippt.jpg',
+        'Naturpapier durchgefärbt': './Bilder/vorsatz/Papier_Naturpapier_durchgefaerbt.jpg',
+        'Naturpapier durchgefärbt gerippt': './Bilder/vorsatz/Papier_Naturpapier_durchgefaerbt_gerippt.jpg',
+        default: './Bilder/vorsatz/Papier_Naturpapier_Weiss.jpg'
+    },
+
+    druckVorsatz: { default: './Bilder/druck/Druck_4_0_CMYK.jpg' },
+
+    spacer: {
+        'ja': './Bilder/pappebuch/Pappebuch_Spacer.jpg',
+        default: './Bilder/pappebuch/Pappebuch_Spacer.jpg'
+    },
+    
+    gestanzteKlappen: {
+        'ja': './Bilder/pappebuch/Pappebuch_Gestanzte_Klappen_01.jpg',
+        default: './Bilder/pappebuch/Pappebuch_Gestanzte_Klappen_01.jpg'
+    },
+    
+    stanzen: { default: './Bilder/pappebuch/Pappebuch_Stanzung_Innenseiten_01.jpg' },
+    
+    stanzung: {
+        'Beispielfoto 1': './Bilder/pappebuch/Pappebuch_Stanzung_Innenseiten_01.jpg',
+        'Beispielfoto 2': './Bilder/pappebuch/Pappebuch_Stanzung_Innenseiten_02.jpg',
+        'Beispielfoto 3': './Bilder/pappebuch/Pappebuch_Gestanzte_Klappen_01.jpg',
+        default: './Bilder/pappebuch/Pappebuch_Stanzung_Innenseiten_01.jpg'
+    },
+
+    gummiband: {
+        'Schwarz': './Bilder/gummiband/Gummiband_Schwarz.jpg',
+        'Farbig': './Bilder/gummiband/Gummiband_Farbig.jpg',
+        default: './Bilder/gummiband/Gummiband_Schwarz.jpg'
+    },
+
+    aufkleber: { default: './Bilder/aufkleber/Aufkleber_Druck_4_0_CMYK.jpg' },
+    
+    aufkleberForm: {
+        'Rund': './Bilder/aufkleber/Aufkleber_Form_Rund.jpg',
+        'Eckig': './Bilder/aufkleber/Aufkleber_Form_Eckig.jpg'
+    },
+    
+    aufkleberMaterial: {
+        'Offsetpapier': './Bilder/aufkleber/Aufkleber_Material_Offsetpapier.jpg',
+        'Papier matt kaschiert': './Bilder/aufkleber/Aufkleber_Material_Matt.jpg',
+        'Papier glänzend kaschiert': './Bilder/aufkleber/Aufkleber_Material_Glaenzend.jpg'
+    },
+    
+    aufkleberFarbigkeit: {
+        '1/0': './Bilder/aufkleber/Aufkleber_Druck_1_0.jpg',
+        '4/0 CMYK': './Bilder/aufkleber/Aufkleber_Druck_4_0_CMYK.jpg'
+    },
+
+    registerstanzung: { default: './Bilder/papier/papier.jpg' },
+    schutzumschlag: { default: './Bilder/papier/Papier_Bilderdruck_matt.jpg' },
+    druckSchutzumschlag: { default: './Bilder/druck/Druck_4_0_CMYK.jpg' },
+    einschweissen: { default: './Bilder/Einschweissen.jpg' },
+    banderolieren: { default: './Bilder/Banderolieren.jpg' },
+    einlegen: { default: './Bilder/papier/papier.jpg' },
+    default: './Bilder/papier/papier.jpg'
+};
 
             useEffect(() => { if (currentStep > maxReachedStep) setMaxReachedStep(currentStep); }, [currentStep]);
 
@@ -1766,7 +2124,7 @@
                 {
                     id: 6,
                     label: formData.bindeart === 'wire-o'
-                        ? 'Deckblatt'
+                        ? 'Deckblatt und Rückblatt'
                         : (formData.bindeart?.startsWith('softcover') || formData.bindeart?.startsWith('broschuere'))
                             ? 'Umschlag'
                             : 'Buchdecke',
@@ -2117,7 +2475,7 @@
                                     className={`option-card ${formData.format === f ? 'active' : ''}`}>
                                     <div className="option-image-container">
                                         <img
-                                            src={BILDER.formate.default}
+                                            src={BILDER.formate[f] || BILDER.formate.default}
                                             alt={f}
                                             onLoad={(e) => {
                                                 e.target.classList.add('loaded');
@@ -2392,7 +2750,7 @@
                                                         className={`option-card ${formData.erweiterterFarbraumTyp === opt.id ? 'active' : ''}`}>
                                                         <div className="option-image-container">
                                                             <img
-                                                                src={BILDER.farbraum.default}
+                                                                src={BILDER.farbraum[opt.id] || BILDER.farbraum.default}
                                                                 alt={opt.name}
                                                                 onLoad={(e) => {
                                                                     e.target.classList.add('loaded');
@@ -2465,7 +2823,7 @@
                                                             <div className="option-card active">
                                                                 <div className="option-image-container">
                                                                     <img
-                                                                        src={BILDER.spacer.default}
+                                                                        src={BILDER.spacer['ja'] || BILDER.spacer.default}
                                                                         alt="Spacer"
                                                                         onLoad={(e) => {
                                                                             e.target.classList.add('loaded');
@@ -2504,7 +2862,7 @@
                                                             className={`option-card ${(formData.farbschnittTyp === f.id || (!formData.farbschnittTyp && f.id === 'Ohne Farbschnitt (Standard)')) ? 'active' : ''}`}>
                                                             <div className="option-image-container">
                                                                 <img
-                                                                    src={BILDER.farbschnitt.default}
+                                                                    src={BILDER.farbschnitt[f.id] || BILDER.farbschnitt.default}
                                                                     alt={f.name}
                                                                     onLoad={(e) => {
                                                                         e.target.classList.add('loaded');
@@ -2567,7 +2925,7 @@
                                                                 <div key={b} className="option-card" style={{ cursor: 'default', opacity: 0.7, pointerEvents: 'none' }}>
                                                                     <div className="option-image-container">
                                                                         <img
-                                                                            src={BILDER.gestanzteKlappen.default}
+                                                                            src={BILDER.gestanzteKlappen['ja'] || BILDER.gestanzteKlappen.default}
                                                                             alt={b}
                                                                             onLoad={(e) => {
                                                                                 e.target.classList.add('loaded');
@@ -2725,7 +3083,7 @@
                                                             className={`option-card ${formData.farbschnittTyp === t ? 'active' : ''}`}>
                                                             <div className="option-image-container">
                                                                 <img
-                                                                    src={BILDER.farbschnitt.default}
+                                                                    src={BILDER.farbschnitt[t] || BILDER.farbschnitt.default}
                                                                     alt={t}
                                                                     onLoad={(e) => {
                                                                         e.target.classList.add('loaded');
@@ -3003,7 +3361,7 @@
                                         className={`option-card ${formData.ringfarbe === r.id ? 'active' : ''}`}>
                                         <div className="option-image-container">
                                             <img
-                                                src={BILDER.ringfarbe.default}
+                                                src={BILDER.ringfarbe[r.id] || BILDER.ringfarbe.default}
                                                 alt={r.name}
                                                 onLoad={(e) => {
                                                     e.target.classList.add('loaded');
@@ -3038,7 +3396,7 @@
                                                     className={`option-card ${formData.klammerfarbe === k.id ? 'active' : ''}`}>
                                                     <div className="option-image-container">
                                                         <img
-                                                            src={BILDER.klammerfarbe.default}
+                                                            src={BILDER.klammerfarbe[k.id] || BILDER.klammerfarbe.default}
                                                             alt={k.name}
                                                             onLoad={(e) => {
                                                                 e.target.classList.add('loaded');
@@ -3088,7 +3446,7 @@
                                                     className={`option-card ${formData.anzahlKlammern === a.id ? 'active' : ''}`}>
                                                     <div className="option-image-container">
                                                         <img
-                                                            src={BILDER.anzahlKlammern.default}
+                                                            src={BILDER.anzahlKlammern[a.id] || BILDER.anzahlKlammern.default}
                                                             alt={a.name}
                                                             onLoad={(e) => {
                                                                 e.target.classList.add('loaded');
@@ -3125,7 +3483,7 @@
                                                 className={`option-card ${formData.ausfuehrung === o.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.ausfuehrung.default}
+                                                        src={BILDER.ausfuehrung[o.id] || BILDER.ausfuehrung.default}
                                                         alt={o.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
@@ -3193,7 +3551,7 @@
                                                             className={`option-card ${formData.garnfarbe === f.id ? 'active' : ''}`}>
                                                             <div className="option-image-container">
                                                                 <img
-                                                                    src={BILDER.garnfarbe.default}
+                                                                    src={BILDER.garnfarbe[f.id] || BILDER.garnfarbe.default}
                                                                     alt={f.name}
                                                                     onLoad={(e) => {
                                                                         e.target.classList.add('loaded');
@@ -3224,7 +3582,7 @@
                                                             className={`option-card ${formData.kapitalbandFarbe === f.id ? 'active' : ''}`}>
                                                             <div className="option-image-container">
                                                                 <img
-                                                                    src={BILDER.kapitalband.default}
+                                                                    src={BILDER.kapitalband[f.id] || BILDER.kapitalband.default}
                                                                     alt={f.name}
                                                                     onLoad={(e) => {
                                                                         e.target.classList.add('loaded');
@@ -3252,7 +3610,7 @@
                                                             className={`option-card ${formData.lesebaendchenFarbe === f.id ? 'active' : ''}`}>
                                                             <div className="option-image-container">
                                                                 <img
-                                                                    src={BILDER.lesebaendchen.default}
+                                                                    src={BILDER.lesebaendchen[f.id] || BILDER.lesebaendchen.default}
                                                                     alt={f.name}
                                                                     onLoad={(e) => {
                                                                         e.target.classList.add('loaded');
@@ -3283,7 +3641,7 @@
                                                         className={`option-card ${formData.farbeFaelzelband === f.id ? 'active' : ''}`}>
                                                         <div className="option-image-container">
                                                             <img
-                                                                src={BILDER.faelzelband.default}
+                                                                src={BILDER.faelzelband[f.id] || BILDER.faelzelband.default}
                                                                 alt={f.name}
                                                                 onLoad={(e) => {
                                                                     e.target.classList.add('loaded');
@@ -3405,13 +3763,23 @@
                             { id: 'Gewebeeinband (z.B. Leinen)', name: 'Gewebeeinband (z.B. Leinen)' },
                             { id: 'Halbgewebeeinband + Papierbezug', name: 'Halbgewebeeinband + Papierbezug' }
                         ];
-
             const druckBuchdeckeOpts = [
                 { id: 'Unbedruckt', name: 'Unbedruckt' },
                 { id: '1/0', name: '1/0 Schwarz' },
                 { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
                 { id: '4/0 CMYK', name: '4/0 CMYK' },
                 { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' }
+            ];
+            const druckPappebuchZusatzOpts = [
+                { id: 'zzgl. Dispersionslack', name: 'zzgl. Dispersionslack' },
+                { id: 'zzgl. Dispersionslack glänzend', name: 'zzgl. Dispersionslack glänzend' },
+                { id: 'zzgl. Dispersionslack seidenmatt', name: 'zzgl. Dispersionslack seidenmatt' }
+            ];
+            const druckBroschuereOpts = [
+                { id: 'Unbedruckt', name: 'Unbedruckt' },
+                { id: '1/1', name: '1/1 Schwarz' },
+                { id: '2/2', name: '2/2 Schwarz + HKS/Pantone' },
+                { id: '4/4', name: '4/4 CMYK' }
             ];
 
             const druckInnenOpts = [
@@ -3437,9 +3805,11 @@
             ];
 
             const lackierungOpts = [
-                { id: 'Drucklack matt', name: 'Drucklack matt' },
-                { id: 'Drucklack glänzend', name: 'Drucklack glänzend' },
-                { id: 'Glitzerlack Gold', name: 'Glitzerlack Gold' },
+                { id: 'Dispersionslack glänzend', name: 'Dispersionslack glänzend' },
+                { id: 'Dispersionslack matt', name: 'Dispersionslack matt' },
+                { id: 'Spotlack', name: 'Spotlack' },
+                { id: '3D Lack', name: '3D Lack' },
+                { id: 'Glitzerlack Silber', name: 'Glitzerlack Silber' },
                 { id: 'Duftlack', name: 'Duftlack' }
             ];
 
@@ -3473,7 +3843,7 @@
                                         className={`option-card ${formData.umschlagAusfuehrung === opt.id ? 'active' : ''}`}>
                                         <div className="option-image-container">
                                             <img
-                                                src={BILDER.umschlagAusfuehrung.default}
+                                                src={BILDER.umschlagAusfuehrung[opt.id] || BILDER.umschlagAusfuehrung.default}
                                                 alt={opt.name}
                                                 onLoad={(e) => {
                                                     e.target.classList.add('loaded');
@@ -3496,205 +3866,79 @@
 
                     {isWireO ? (
                         <>
-                            <TwoColumnField label="Bezugsmaterial Deckblatt" required>
-                                <div className="options-grid mb-3">
-                                    {bezugsmaterialOpts.map(b => (
-                                        <div key={b.id} onClick={() => updateWithReset('bezugsmaterialDeckblatt', b.id, 6)}
-                                            className={`option-card ${formData.bezugsmaterialDeckblatt === b.id ? 'active' : ''}`}>
-                                            <div className="option-image-container">
-                                                <img
-                                                    src={BILDER.bezugsmaterial[b.id] || BILDER.default}
-                                                    alt={b.name}
-                                                    onLoad={(e) => {
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                    onError={(e) => {
-                                                        e.target.src = BILDER.default;
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                />
-                                                {formData.bezugsmaterialDeckblatt === b.id && <div className="option-checkmark">✓</div>}
-                                            </div>
-                                            <div className="option-label">{b.name}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </TwoColumnField>
+                            {/* 📦 DECKBLATT BEREICH */}
+                            <div className="mb-12">
+                                <h2 className="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-300" style={{ color: '#FF5F37' }}>Deckblatt</h2>
 
-                            {formData.bezugsmaterialDeckblatt === 'Durchgefärbter Karton' && (
-                                <TwoColumnField label="Durchgefärbter Karton Farbe Deckblatt">
+                                <TwoColumnField label="Karton/Material Deckblatt" required>
                                     <div className="options-grid mb-3">
-                                        {['Name Farbe', 'Name Farbe', 'Name Farbe', 'Name Farbe'].map((farbe, idx) => (
-                                            <div
-                                                key={idx}
-                                                onClick={() => update('durchgefaerbterKartonFarbeDeckblatt', farbe + ' ' + (idx + 1))}
-                                                className={`option-card ${formData.durchgefaerbterKartonFarbeDeckblatt === farbe + ' ' + (idx + 1) ? 'active' : ''}`}
-                                            >
+                                        {bezugsmaterialOpts.map(b => (
+                                            <div key={b.id} onClick={() => updateWithReset('bezugsmaterialDeckblatt', b.id, 6)}
+                                                className={`option-card ${formData.bezugsmaterialDeckblatt === b.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
-                                                    <div style={{
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        background: idx === 0 ? '#FF6B4A' : idx === 1 ? '#4A90E2' : idx === 2 ? '#F5E6D3' : '#D3C5B8',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}></div>
-                                                    {formData.durchgefaerbterKartonFarbeDeckblatt === farbe + ' ' + (idx + 1) && (
-                                                        <div className="option-checkmark">✓</div>
-                                                    )}
+                                                    <img
+                                                        src={BILDER.bezugsmaterial[b.id] || BILDER.default}
+                                                        alt={b.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.bezugsmaterialDeckblatt === b.id && <div className="option-checkmark">✓</div>}
                                                 </div>
-                                                <div className="option-label">{farbe}</div>
+                                                <div className="option-label">{b.name}</div>
                                             </div>
                                         ))}
-
-                                        <div
-                                            onClick={() => window.open('#', '_blank')}
-                                            className="option-card"
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <div className="option-image-container">
-                                                <div style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    background: 'white',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    flexDirection: 'column',
-                                                    padding: '20px',
-                                                    textAlign: 'center'
-                                                }}>
-                                                    <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}>
-                                                        Mehr farbiger Karton von Fedregoni
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="option-label" style={{ background: 'white', color: 'black' }}>
-                                                &gt; PDF Download
-                                            </div>
-                                        </div>
                                     </div>
 
-                                    <div className="mt-4">
-                                        <label className="block mb-2 font-medium text-sm">Bitte notieren Sie hier Ihre Wunschfarbe Deckblatt:</label>
-                                        <textarea
-                                            value={formData.durchgefaerbterKartonFarbeFreitextDeckblatt || ''}
-                                            onChange={e => update('durchgefaerbterKartonFarbeFreitextDeckblatt', e.target.value)}
-                                            placeholder="z.B. Fedregoni Sirio Color Rough Lampone 290g/m²"
-                                            className="input-field"
-                                            style={{ minHeight: '80px' }}
-                                        />
-                                    </div>
-                                </TwoColumnField>
-                            )}
-
-                            <TwoColumnField label="Bezugsmaterial Rückblatt" required>
-                                <div className="options-grid mb-3">
-                                    {bezugsmaterialOpts.map(b => (
-                                        <div key={b.id} onClick={() => update('bezugsmaterialRueckblatt', b.id)}
-                                            className={`option-card ${formData.bezugsmaterialRueckblatt === b.id ? 'active' : ''}`}>
-                                            <div className="option-image-container">
-                                                <img
-                                                    src={BILDER.bezugsmaterial[b.id] || BILDER.default}
-                                                    alt={b.name}
-                                                    onLoad={(e) => {
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                    onError={(e) => {
-                                                        e.target.src = BILDER.default;
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                />
-                                                {formData.bezugsmaterialRueckblatt === b.id && <div className="option-checkmark">✓</div>}
-                                            </div>
-                                            <div className="option-label">{b.name}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </TwoColumnField>
-
-                            {formData.bezugsmaterialRueckblatt === 'Durchgefärbter Karton' && (
-                                <TwoColumnField label="Durchgefärbter Karton Farbe Rückblatt">
-                                    <div className="options-grid mb-3">
-                                        {['Name Farbe', 'Name Farbe', 'Name Farbe', 'Name Farbe'].map((farbe, idx) => (
-                                            <div
-                                                key={idx}
-                                                onClick={() => update('durchgefaerbterKartonFarbeRueckblatt', farbe + ' ' + (idx + 1))}
-                                                className={`option-card ${formData.durchgefaerbterKartonFarbeRueckblatt === farbe + ' ' + (idx + 1) ? 'active' : ''}`}
+                                    {formData.bezugsmaterialDeckblatt && (
+                                        <>
+                                            <label className="block mb-2 font-medium text-sm mt-4">Grammatur:</label>
+                                            <select
+                                                value={formData.grammaturDeckblatt || ''}
+                                                onChange={e => update('grammaturDeckblatt', e.target.value)}
+                                                className="input-field mb-4"
                                             >
-                                                <div className="option-image-container">
-                                                    <div style={{
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        background: idx === 0 ? '#FF6B4A' : idx === 1 ? '#4A90E2' : idx === 2 ? '#F5E6D3' : '#D3C5B8',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}></div>
-                                                    {formData.durchgefaerbterKartonFarbeRueckblatt === farbe + ' ' + (idx + 1) && (
-                                                        <div className="option-checkmark">✓</div>
-                                                    )}
-                                                </div>
-                                                <div className="option-label">{farbe}</div>
-                                            </div>
-                                        ))}
+                                                <option value="">Bitte wählen...</option>
+                                                <option value="150">150g</option>
+                                                <option value="200">200g</option>
+                                                <option value="250">250g</option>
+                                                <option value="300">300g</option>
+                                                <option value="350">350g</option>
+                                            </select>
 
-                                        <div
-                                            onClick={() => window.open('#', '_blank')}
-                                            className="option-card"
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <div className="option-image-container">
-                                                <div style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    background: 'white',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    flexDirection: 'column',
-                                                    padding: '20px',
-                                                    textAlign: 'center'
-                                                }}>
-                                                    <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}>
-                                                        Mehr farbiger Karton von Fedregoni
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="option-label" style={{ background: 'white', color: 'black' }}>
-                                                &gt; PDF Download
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-4">
-                                        <label className="block mb-2 font-medium text-sm">Bitte notieren Sie hier Ihre Wunschfarbe Rückblatt:</label>
-                                        <textarea
-                                            value={formData.durchgefaerbterKartonFarbeFreitextRueckblatt || ''}
-                                            onChange={e => update('durchgefaerbterKartonFarbeFreitextRueckblatt', e.target.value)}
-                                            placeholder="z.B. Fedregoni Sirio Color Rough Lampone 290g/m²"
-                                            className="input-field"
-                                            style={{ minHeight: '80px' }}
-                                        />
-                                    </div>
+                                            <label className="block mb-2 font-medium text-sm">Was wünschst du dir vom Karton?</label>
+                                            <textarea
+                                                value={formData.kartonAnmerkungDeckblatt || ''}
+                                                onChange={e => update('kartonAnmerkungDeckblatt', e.target.value)}
+                                                placeholder="Ihre Wünsche..."
+                                                className="input-field"
+                                                style={{ minHeight: '80px' }}
+                                            />
+                                        </>
+                                    )}
                                 </TwoColumnField>
-                            )}
 
-                            {formData.bezugsmaterialDeckblatt && formData.bezugsmaterialRueckblatt && (
-                                <>
-                                    <TwoColumnField label={`Druck Deckblatt (U1 + U4)`} required>
+                                {formData.bezugsmaterialDeckblatt === 'Durchgefärbter Karton' && (
+                                    <TwoColumnField label="Durchgefärbter Karton Farbe Deckblatt">
                                         <div className="options-grid">
-                                            {druckBuchdeckeOpts.map(d => (
-                                                <div key={d.id} onClick={() => update('druckBuchdecke', d.id)}
-                                                    className={`option-card ${formData.druckBuchdecke === d.id ? 'active' : ''}`}>
+                                            {[
+                                                { id: 'Navy', name: 'Navy' },
+                                                { id: 'Rosé', name: 'Rosé' },
+                                                { id: 'Tomatenrot', name: 'Tomatenrot' },
+                                                { id: 'Bordeaux', name: 'Bordeaux' }
+                                            ].map(f => (
+                                                <div key={f.id} onClick={() => update('durchgefaerbterKartonFarbeDeckblatt', f.id)}
+                                                    className={`option-card ${formData.durchgefaerbterKartonFarbeDeckblatt === f.id ? 'active' : ''}`}>
                                                     <div className="option-image-container">
                                                         <img
-                                                            src={BILDER.druckBuchdecke.default}
-                                                            alt={d.name}
+                                                            src={BILDER.default}
+                                                            alt={f.name}
                                                             onLoad={(e) => {
                                                                 e.target.classList.add('loaded');
                                                                 e.target.parentElement.classList.add('has-image');
@@ -3705,40 +3949,304 @@
                                                                 e.target.parentElement.classList.add('has-image');
                                                             }}
                                                         />
-                                                        {formData.druckBuchdecke === d.id && <div className="option-checkmark">✓</div>}
+                                                        {formData.durchgefaerbterKartonFarbeDeckblatt === f.id && <div className="option-checkmark">✓</div>}
                                                     </div>
-                                                    <div className="option-label">{d.name}</div>
+                                                    <div className="option-label">{f.name}</div>
                                                 </div>
                                             ))}
+                                            <div className="option-card" style={{ cursor: 'default', opacity: 0.7 }}>
+                                                <div className="option-image-container">
+                                                    <img src={BILDER.default} alt="PDF Download" onLoad={(e) => { e.target.classList.add('loaded'); e.target.parentElement.classList.add('has-image'); }} onError={(e) => { e.target.src = BILDER.default; e.target.classList.add('loaded'); e.target.parentElement.classList.add('has-image'); }} />
+                                                </div>
+                                                <div className="option-label">PDF Download</div>
+                                            </div>
                                         </div>
-                                        <p className="info-text mt-4">
-                                            Beim Druck unterscheidet man, ob das Papier ein- oder beidseitig bedruckt wird. Die erste Zahl (1, 2, 4, 5, 6/…) gibt an, mit wie vielen Farben die Vorderseite bedruckt wird. Die zweite Zahl zeigt, ob und wie die Rückseite bedruckt wird (z. B. 1/0 = einseitig einfarbig, 4/4 = beidseitig vierfarbig). Farbige Bücher sind meist 4-farbig gedruckt. HKS/Pantone sind Sonderfarben. CMYK ist eine Bezeichnung für den Standard-Farbraum aus Cyan, Magenta, Gelb und Schwarz (wählen Sie CMYK, wenn Sie normalen Farbdruck wollen).
-                                        </p>
                                     </TwoColumnField>
+                                )}
 
-                                    {formData.druckBuchdecke && formData.druckBuchdecke !== 'Unbedruckt' && (
-                                        <TwoColumnField label={`Zusätzlich Dispersionslack (U1 + U4)?`}>
-                                            <div className="flex gap-4">
-                                                <button onClick={() => update('dispersionslackBuchdecke', 'ja')} className={`choice-button ${formData.dispersionslackBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
-                                                <button onClick={() => update('dispersionslackBuchdecke', 'nein')} className={`choice-button ${formData.dispersionslackBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
+                                {formData.bezugsmaterialDeckblatt && (
+                                    <>
+                                        <TwoColumnField label="Druck außen (U1 + U2) Deckblatt" required>
+                                            <div className="options-grid">
+                                                {druckBuchdeckeOpts.map(d => (
+                                                    <div key={d.id} onClick={() => update('druckDeckblatt', d.id)}
+                                                        className={`option-card ${formData.druckDeckblatt === d.id ? 'active' : ''}`}>
+                                                        <div className="option-image-container">
+                                                            <img
+                                                                src={BILDER.druckBuchdecke[d.id] || BILDER.druckBuchdecke.default}
+                                                                alt={d.name}
+                                                                onLoad={(e) => {
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                                onError={(e) => {
+                                                                    e.target.src = BILDER.default;
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                            />
+                                                            {formData.druckDeckblatt === d.id && <div className="option-checkmark">✓</div>}
+                                                        </div>
+                                                        <div className="option-label">{d.name}</div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </TwoColumnField>
+
+                                        {formData.druckDeckblatt && formData.druckDeckblatt !== 'Unbedruckt' && (
+                                            <TwoColumnField label="Zusätzlich Dispersionslack?">
+                                                <div className="flex gap-4 mb-4">
+                                                    <button onClick={() => update('dispersionslackDeckblatt', 'ja')} className={`choice-button ${formData.dispersionslackDeckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                    <button onClick={() => update('dispersionslackDeckblatt', 'nein')} className={`choice-button ${formData.dispersionslackDeckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                </div>
+                                                <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                                                    <p className="text-sm text-gray-700">
+                                                        Ein Dispersionslack ist ein durchsichtiger Schutzlack. Sprechen Sie uns gerne an, wenn Sie wissen wollen, ob ein solcher Lack in Ihrem Fall empfehlenswert ist.
+                                                    </p>
+                                                </div>
+                                            </TwoColumnField>
+                                        )}
+
+                                        <TwoColumnField label="Folienkaschierung Deckblatt?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('folienkaschierungDeckblatt', 'ja')} className={`choice-button ${formData.folienkaschierungDeckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('folienkaschierungDeckblatt', 'nein')} className={`choice-button ${formData.folienkaschierungDeckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                            </div>
+                                            {formData.folienkaschierungDeckblatt === 'ja' && (
+                                                <div className="options-grid">
+                                                    {folienOpts.map(f => (
+                                                        <div key={f.id} onClick={() => update('folienkaschierungDeckblattTyp', f.id)}
+                                                            className={`option-card ${formData.folienkaschierungDeckblattTyp === f.id ? 'active' : ''}`}>
+                                                            <div className="option-image-container">
+                                                                <img
+                                                                    src={BILDER.folie[f.id] || BILDER.folie.default}
+                                                                    alt={f.name}
+                                                                    onLoad={(e) => {
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = BILDER.default;
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                />
+                                                                {formData.folienkaschierungDeckblattTyp === f.id && <div className="option-checkmark">✓</div>}
+                                                            </div>
+                                                            <div className="option-label">{f.name}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </TwoColumnField>
+
+                                        <TwoColumnField label="Lackierung Deckblatt?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('lackierungDeckblatt', 'ja')} className={`choice-button ${formData.lackierungDeckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('lackierungDeckblatt', 'nein')} className={`choice-button ${formData.lackierungDeckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                            </div>
+                                            {formData.lackierungDeckblatt === 'ja' && (
+                                                <>
+                                                    <div className="options-grid mb-4">
+                                                        {[
+                                                            { id: 'Dispersionslack glänzend', name: 'Dispersionslack glänzend' },
+                                                            { id: 'Dispersionslack matt', name: 'Dispersionslack matt' },
+                                                            { id: 'Spotlack', name: 'Spotlack' },
+                                                            { id: '3D Lack', name: '3D Lack' },
+                                                            { id: 'Glitzerlack Silber', name: 'Glitzerlack Silber' },
+                                                            { id: 'Duftlack', name: 'Duftlack' }
+                                                        ].map(l => (
+                                                            <div key={l.id} onClick={() => update('lackierungDeckblattTyp', l.id)}
+                                                                className={`option-card ${formData.lackierungDeckblattTyp === l.id ? 'active' : ''}`}>
+                                                                <div className="option-image-container">
+                                                                    <img
+                                                                        src={BILDER.lackierung[l.id] || BILDER.lackierung.default}
+                                                                        alt={l.name}
+                                                                        onLoad={(e) => {
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.src = BILDER.default;
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                    />
+                                                                    {formData.lackierungDeckblattTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                                </div>
+                                                                <div className="option-label">{l.name}</div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <label className="block mb-2 font-medium text-sm">Wunschlackierung hier notieren:</label>
+                                                    <textarea
+                                                        value={formData.lackierungDeckblattAnmerkung || ''}
+                                                        onChange={e => update('lackierungDeckblattAnmerkung', e.target.value)}
+                                                        placeholder="z.B. Spezielle Lackierung..."
+                                                        className="input-field"
+                                                        style={{ minHeight: '80px' }}
+                                                    />
+                                                </>
+                                            )}
+                                        </TwoColumnField>
+
+                                        <TwoColumnField label="Prägung Deckblatt?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('praegungDeckblatt', 'ja')} className={`choice-button ${formData.praegungDeckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('praegungDeckblatt', 'nein')} className={`choice-button ${formData.praegungDeckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                            </div>
+                                            {formData.praegungDeckblatt === 'ja' && (
+                                                <div className="options-grid">
+                                                    {praegungOpts.map(p => (
+                                                        <div key={p.id} onClick={() => update('praegungDeckblattTyp', p.id)}
+                                                            className={`option-card ${formData.praegungDeckblattTyp === p.id ? 'active' : ''}`}>
+                                                            <div className="option-image-container">
+                                                                <img
+                                                                    src={BILDER.praegung[p.id] || BILDER.praegung.default}
+                                                                    alt={p.name}
+                                                                    onLoad={(e) => {
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = BILDER.default;
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                />
+                                                                {formData.praegungDeckblattTyp === p.id && <div className="option-checkmark">✓</div>}
+                                                            </div>
+                                                            <div className="option-label">{p.name}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </TwoColumnField>
+
+                                        <TwoColumnField label="Deckfolie?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('deckfolie', 'ja')} className={`choice-button ${formData.deckfolie === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('deckfolie', 'nein')} className={`choice-button ${formData.deckfolie === 'nein' ? 'active' : ''}`}>Nein</button>
+                                            </div>
+                                            <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                                                <p className="text-sm text-gray-700">
+                                                    Die Deckfolie ist eine klare (durchsichtige) PVC-Seite, die als erste und letzte Seite noch vor dem Deck- und Rückblatt eingebunden wird. Sie schützt das Buch.
+                                                </p>
+                                            </div>
+                                        </TwoColumnField>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* 📦 RÜCKBLATT BEREICH */}
+                            <div className="mb-12">
+                                <h2 className="text-2xl font-bold mb-6 pb-3 border-b-2 border-gray-300" style={{ color: '#FF5F37' }}>Rückblatt</h2>
+
+                                <TwoColumnField label="Karton/Material Rückblatt" required>
+                                    <div className="options-grid mb-3">
+                                        {bezugsmaterialOpts.map(b => (
+                                            <div key={b.id} onClick={() => updateWithReset('bezugsmaterialRueckblatt', b.id, 6)}
+                                                className={`option-card ${formData.bezugsmaterialRueckblatt === b.id ? 'active' : ''}`}>
+                                                <div className="option-image-container">
+                                                    <img
+                                                        src={BILDER.bezugsmaterial[b.id] || BILDER.default}
+                                                        alt={b.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.bezugsmaterialRueckblatt === b.id && <div className="option-checkmark">✓</div>}
+                                                </div>
+                                                <div className="option-label">{b.name}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {formData.bezugsmaterialRueckblatt && (
+                                        <>
+                                            <label className="block mb-2 font-medium text-sm mt-4">Grammatur:</label>
+                                            <select
+                                                value={formData.grammaturRueckblatt || ''}
+                                                onChange={e => update('grammaturRueckblatt', e.target.value)}
+                                                className="input-field mb-4"
+                                            >
+                                                <option value="">Bitte wählen...</option>
+                                                <option value="150">150g</option>
+                                                <option value="200">200g</option>
+                                                <option value="250">250g</option>
+                                                <option value="300">300g</option>
+                                                <option value="350">350g</option>
+                                            </select>
+
+                                            <label className="block mb-2 font-medium text-sm">Was wünschst du dir vom Karton?</label>
+                                            <textarea
+                                                value={formData.kartonAnmerkungRueckblatt || ''}
+                                                onChange={e => update('kartonAnmerkungRueckblatt', e.target.value)}
+                                                placeholder="Ihre Wünsche..."
+                                                className="input-field"
+                                                style={{ minHeight: '80px' }}
+                                            />
+                                        </>
                                     )}
+                                </TwoColumnField>
 
-                                    <TwoColumnField label={`Folienkaschierung ${coverLabel}?`}>
-                                        <div className="flex gap-4 mb-4">
-                                            <button onClick={() => update('folienkaschierung', 'ja')} className={`choice-button ${formData.folienkaschierung === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('folienkaschierung', 'nein')} className={`choice-button ${formData.folienkaschierung === 'nein' ? 'active' : ''}`}>Nein</button>
+                                {formData.bezugsmaterialRueckblatt === 'Durchgefärbter Karton' && (
+                                    <TwoColumnField label="Durchgefärbter Karton Farbe Rückblatt">
+                                        <div className="options-grid">
+                                            {[
+                                                { id: 'Navy', name: 'Navy' },
+                                                { id: 'Rosé', name: 'Rosé' },
+                                                { id: 'Tomatenrot', name: 'Tomatenrot' },
+                                                { id: 'Bordeaux', name: 'Bordeaux' }
+                                            ].map(f => (
+                                                <div key={f.id} onClick={() => update('durchgefaerbterKartonFarbeRueckblatt', f.id)}
+                                                    className={`option-card ${formData.durchgefaerbterKartonFarbeRueckblatt === f.id ? 'active' : ''}`}>
+                                                    <div className="option-image-container">
+                                                        <img
+                                                            src={BILDER.default}
+                                                            alt={f.name}
+                                                            onLoad={(e) => {
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                            onError={(e) => {
+                                                                e.target.src = BILDER.default;
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                        />
+                                                        {formData.durchgefaerbterKartonFarbeRueckblatt === f.id && <div className="option-checkmark">✓</div>}
+                                                    </div>
+                                                    <div className="option-label">{f.name}</div>
+                                                </div>
+                                            ))}
+                                            <div className="option-card" style={{ cursor: 'default', opacity: 0.7 }}>
+                                                <div className="option-image-container">
+                                                    <img src={BILDER.default} alt="PDF Download" onLoad={(e) => { e.target.classList.add('loaded'); e.target.parentElement.classList.add('has-image'); }} onError={(e) => { e.target.src = BILDER.default; e.target.classList.add('loaded'); e.target.parentElement.classList.add('has-image'); }} />
+                                                </div>
+                                                <div className="option-label">PDF Download</div>
+                                            </div>
                                         </div>
-                                        {formData.folienkaschierung === 'ja' && (
+                                    </TwoColumnField>
+                                )}
+
+                                {formData.bezugsmaterialRueckblatt && (
+                                    <>
+                                        <TwoColumnField label="Druck außen (U1 + U2) Rückblatt" required>
                                             <div className="options-grid">
-                                                {folienOpts.map(f => (
-                                                    <div key={f.id} onClick={() => update('folienkaschierungTyp', f.id)}
-                                                        className={`option-card ${formData.folienkaschierungTyp === f.id ? 'active' : ''}`}>
+                                                {druckBuchdeckeOpts.map(d => (
+                                                    <div key={d.id} onClick={() => update('druckRueckblatt', d.id)}
+                                                        className={`option-card ${formData.druckRueckblatt === d.id ? 'active' : ''}`}>
                                                         <div className="option-image-container">
                                                             <img
-                                                                src={BILDER.folie.default}
-                                                                alt={f.name}
+                                                                src={BILDER.druckBuchdecke[d.id] || BILDER.druckBuchdecke.default}
+                                                                alt={d.name}
                                                                 onLoad={(e) => {
                                                                     e.target.classList.add('loaded');
                                                                     e.target.parentElement.classList.add('has-image');
@@ -3749,194 +4257,146 @@
                                                                     e.target.parentElement.classList.add('has-image');
                                                                 }}
                                                             />
-                                                            {formData.folienkaschierungTyp === f.id && <div className="option-checkmark">✓</div>}
+                                                            {formData.druckRueckblatt === d.id && <div className="option-checkmark">✓</div>}
                                                         </div>
-                                                        <div className="option-label">{f.name}</div>
+                                                        <div className="option-label">{d.name}</div>
                                                     </div>
                                                 ))}
                                             </div>
-                                        )}
-                                    </TwoColumnField>
+                                        </TwoColumnField>
 
-                                    <TwoColumnField label={`Lackierung ${coverLabel}?`}>
-                                        <div className="flex gap-4 mb-4">
-                                            <button onClick={() => update('lackierung', 'ja')} className={`choice-button ${formData.lackierung === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('lackierung', 'nein')} className={`choice-button ${formData.lackierung === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                        {formData.lackierung === 'ja' && (
-                                            <div className="options-grid">
-                                                {lackierungOpts.map(l => (
-                                                    <div key={l.id} onClick={() => update('lackierungTyp', l.id)}
-                                                        className={`option-card ${formData.lackierungTyp === l.id ? 'active' : ''}`}>
-                                                        <div className="option-image-container">
-                                                            <img
-                                                                src={BILDER.lackierung.default}
-                                                                alt={l.name}
-                                                                onLoad={(e) => {
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                                onError={(e) => {
-                                                                    e.target.src = BILDER.default;
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                            />
-                                                            {formData.lackierungTyp === l.id && <div className="option-checkmark">✓</div>}
-                                                        </div>
-                                                        <div className="option-label">{l.name}</div>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                        {formData.druckRueckblatt && formData.druckRueckblatt !== 'Unbedruckt' && (
+                                            <TwoColumnField label="Zusätzlich Dispersionslack?">
+                                                <div className="flex gap-4 mb-4">
+                                                    <button onClick={() => update('dispersionslackRueckblatt', 'ja')} className={`choice-button ${formData.dispersionslackRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                    <button onClick={() => update('dispersionslackRueckblatt', 'nein')} className={`choice-button ${formData.dispersionslackRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                </div>
+                                                <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                                                    <p className="text-sm text-gray-700">
+                                                        Ein Dispersionslack ist ein durchsichtiger Schutzlack. Sprechen Sie uns gerne an, wenn Sie wissen wollen, ob ein solcher Lack in Ihrem Fall empfehlenswert ist.
+                                                    </p>
+                                                </div>
+                                            </TwoColumnField>
                                         )}
-                                    </TwoColumnField>
 
-                                    <TwoColumnField label={`Prägung ${coverLabel}?`}>
-                                        <div className="flex gap-4 mb-4">
-                                            <button onClick={() => update('praegung', 'ja')} className={`choice-button ${formData.praegung === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('praegung', 'nein')} className={`choice-button ${formData.praegung === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                        {formData.praegung === 'ja' && (
-                                            <div className="options-grid">
-                                                {praegungOpts.map(p => (
-                                                    <div key={p.id} onClick={() => update('praegungTyp', p.id)}
-                                                        className={`option-card ${formData.praegungTyp === p.id ? 'active' : ''}`}>
-                                                        <div className="option-image-container">
-                                                            <img
-                                                                src={BILDER.praegung.default}
-                                                                alt={p.name}
-                                                                onLoad={(e) => {
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                                onError={(e) => {
-                                                                    e.target.src = BILDER.default;
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                            />
-                                                            {formData.praegungTyp === p.id && <div className="option-checkmark">✓</div>}
-                                                        </div>
-                                                        <div className="option-label">{p.name}</div>
-                                                    </div>
-                                                ))}
+                                        <TwoColumnField label="Folienkaschierung Rückblatt?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('folienkaschierungRueckblatt', 'ja')} className={`choice-button ${formData.folienkaschierungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('folienkaschierungRueckblatt', 'nein')} className={`choice-button ${formData.folienkaschierungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
                                             </div>
-                                        )}
-                                    </TwoColumnField>
+                                            {formData.folienkaschierungRueckblatt === 'ja' && (
+                                                <div className="options-grid">
+                                                    {folienOpts.map(f => (
+                                                        <div key={f.id} onClick={() => update('folienkaschierungRueckblattTyp', f.id)}
+                                                            className={`option-card ${formData.folienkaschierungRueckblattTyp === f.id ? 'active' : ''}`}>
+                                                            <div className="option-image-container">
+                                                                <img
+                                                                    src={BILDER.folie[f.id] || BILDER.folie.default}
+                                                                    alt={f.name}
+                                                                    onLoad={(e) => {
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = BILDER.default;
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                />
+                                                                {formData.folienkaschierungRueckblattTyp === f.id && <div className="option-checkmark">✓</div>}
+                                                            </div>
+                                                            <div className="option-label">{f.name}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </TwoColumnField>
 
-                                    <TwoColumnField label="Folienkaschierung Rückblatt?">
-                                        <div className="flex gap-4 mb-4">
-                                            <button onClick={() => update('folienkaschierungRueckblatt', 'ja')} className={`choice-button ${formData.folienkaschierungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('folienkaschierungRueckblatt', 'nein')} className={`choice-button ${formData.folienkaschierungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                        {formData.folienkaschierungRueckblatt === 'ja' && (
-                                            <div className="options-grid">
-                                                {[
-                                                    { id: 'Matt', name: 'Matt' },
-                                                    { id: 'Glänzend', name: 'Glänzend' },
-                                                    { id: 'Soft-Touch', name: 'Soft-Touch' }
-                                                ].map(f => (
-                                                    <div key={f.id} onClick={() => update('folienkaschierungRueckblattTyp', f.id)}
-                                                        className={`option-card ${formData.folienkaschierungRueckblattTyp === f.id ? 'active' : ''}`}>
-                                                        <div className="option-image-container">
-                                                            <img
-                                                                src={BILDER.folie.default}
-                                                                alt={f.name}
-                                                                onLoad={(e) => {
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                                onError={(e) => {
-                                                                    e.target.src = BILDER.default;
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                            />
-                                                            {formData.folienkaschierungRueckblattTyp === f.id && <div className="option-checkmark">✓</div>}
-                                                        </div>
-                                                        <div className="option-label">{f.name}</div>
-                                                    </div>
-                                                ))}
+                                        <TwoColumnField label="Lackierung Rückblatt?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('lackierungRueckblatt', 'ja')} className={`choice-button ${formData.lackierungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('lackierungRueckblatt', 'nein')} className={`choice-button ${formData.lackierungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
                                             </div>
-                                        )}
-                                    </TwoColumnField>
+                                            {formData.lackierungRueckblatt === 'ja' && (
+                                                <>
+                                                    <div className="options-grid mb-4">
+                                                        {[
+                                                            { id: 'Dispersionslack glänzend', name: 'Dispersionslack glänzend' },
+                                                            { id: 'Dispersionslack matt', name: 'Dispersionslack matt' },
+                                                            { id: 'Spotlack', name: 'Spotlack' },
+                                                            { id: '3D Lack', name: '3D Lack' },
+                                                            { id: 'Glitzerlack Silber', name: 'Glitzerlack Silber' },
+                                                            { id: 'Duftlack', name: 'Duftlack' }
+                                                        ].map(l => (
+                                                            <div key={l.id} onClick={() => update('lackierungRueckblattTyp', l.id)}
+                                                                className={`option-card ${formData.lackierungRueckblattTyp === l.id ? 'active' : ''}`}>
+                                                                <div className="option-image-container">
+                                                                    <img
+                                                                        src={BILDER.lackierung[l.id] || BILDER.lackierung.default}
+                                                                        alt={l.name}
+                                                                        onLoad={(e) => {
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.src = BILDER.default;
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                    />
+                                                                    {formData.lackierungRueckblattTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                                </div>
+                                                                <div className="option-label">{l.name}</div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <label className="block mb-2 font-medium text-sm">Wunschlackierung hier notieren:</label>
+                                                    <textarea
+                                                        value={formData.lackierungRueckblattAnmerkung || ''}
+                                                        onChange={e => update('lackierungRueckblattAnmerkung', e.target.value)}
+                                                        placeholder="z.B. Spezielle Lackierung..."
+                                                        className="input-field"
+                                                        style={{ minHeight: '80px' }}
+                                                    />
+                                                </>
+                                            )}
+                                        </TwoColumnField>
 
-                                    <TwoColumnField label="Lackierung Rückblatt?">
-                                        <div className="flex gap-4 mb-4">
-                                            <button onClick={() => update('lackierungRueckblatt', 'ja')} className={`choice-button ${formData.lackierungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('lackierungRueckblatt', 'nein')} className={`choice-button ${formData.lackierungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                        {formData.lackierungRueckblatt === 'ja' && (
-                                            <div className="options-grid">
-                                                {[
-                                                    { id: 'Glanzlack', name: 'Glanzlack' },
-                                                    { id: 'Mattlack', name: 'Mattlack' },
-                                                    { id: 'UV-Lack', name: 'UV-Lack' },
-                                                    { id: 'Hybrid-Lack', name: 'Hybrid-Lack' }
-                                                ].map(l => (
-                                                    <div key={l.id} onClick={() => update('lackierungRueckblattTyp', l.id)}
-                                                        className={`option-card ${formData.lackierungRueckblattTyp === l.id ? 'active' : ''}`}>
-                                                        <div className="option-image-container">
-                                                            <img
-                                                                src={BILDER.lackierung.default}
-                                                                alt={l.name}
-                                                                onLoad={(e) => {
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                                onError={(e) => {
-                                                                    e.target.src = BILDER.default;
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                            />
-                                                            {formData.lackierungRueckblattTyp === l.id && <div className="option-checkmark">✓</div>}
-                                                        </div>
-                                                        <div className="option-label">{l.name}</div>
-                                                    </div>
-                                                ))}
+                                        <TwoColumnField label="Prägung Rückblatt?">
+                                            <div className="flex gap-4 mb-4">
+                                                <button onClick={() => update('praegungRueckblatt', 'ja')} className={`choice-button ${formData.praegungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('praegungRueckblatt', 'nein')} className={`choice-button ${formData.praegungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
                                             </div>
-                                        )}
-                                    </TwoColumnField>
-
-                                    <TwoColumnField label="Prägung Rückblatt?">
-                                        <div className="flex gap-4 mb-4">
-                                            <button onClick={() => update('praegungRueckblatt', 'ja')} className={`choice-button ${formData.praegungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('praegungRueckblatt', 'nein')} className={`choice-button ${formData.praegungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                        {formData.praegungRueckblatt === 'ja' && (
-                                            <div className="options-grid">
-                                                {[
-                                                    { id: 'Blindprägung', name: 'Blindprägung' },
-                                                    { id: 'Folienprägung', name: 'Folienprägung' },
-                                                    { id: 'Reliefprägung', name: 'Reliefprägung' }
-                                                ].map(p => (
-                                                    <div key={p.id} onClick={() => update('praegungRueckblattTyp', p.id)}
-                                                        className={`option-card ${formData.praegungRueckblattTyp === p.id ? 'active' : ''}`}>
-                                                        <div className="option-image-container">
-                                                            <img
-                                                                src={BILDER.praegung.default}
-                                                                alt={p.name}
-                                                                onLoad={(e) => {
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                                onError={(e) => {
-                                                                    e.target.src = BILDER.default;
-                                                                    e.target.classList.add('loaded');
-                                                                    e.target.parentElement.classList.add('has-image');
-                                                                }}
-                                                            />
-                                                            {formData.praegungRueckblattTyp === p.id && <div className="option-checkmark">✓</div>}
+                                            {formData.praegungRueckblatt === 'ja' && (
+                                                <div className="options-grid">
+                                                    {praegungOpts.map(p => (
+                                                        <div key={p.id} onClick={() => update('praegungRueckblattTyp', p.id)}
+                                                            className={`option-card ${formData.praegungRueckblattTyp === p.id ? 'active' : ''}`}>
+                                                            <div className="option-image-container">
+                                                                <img
+                                                                    src={BILDER.praegung[p.id] || BILDER.praegung.default}
+                                                                    alt={p.name}
+                                                                    onLoad={(e) => {
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = BILDER.default;
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                />
+                                                                {formData.praegungRueckblattTyp === p.id && <div className="option-checkmark">✓</div>}
+                                                            </div>
+                                                            <div className="option-label">{p.name}</div>
                                                         </div>
-                                                        <div className="option-label">{p.name}</div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </TwoColumnField>
-                                </>
-                            )}
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </TwoColumnField>
+                                    </>
+                                )}
+                            </div>
                         </>
                     ) : (<>
                         <TwoColumnField label="Bezugsmaterial" required>
@@ -3969,29 +4429,56 @@
                             )}
                         </TwoColumnField>
 
+                        {formData.bezugsmaterial && (
+                            <TwoColumnField label="">
+                                <label className="block mb-2 font-medium text-sm">
+                                    {isSoftcover
+                                        ? 'Was wünschst du dir vom Material?'
+                                        : 'Was wünschst du dir vom Bezugsmaterial?'}
+                                </label>
+                                <textarea
+                                    value={formData.bezugsmaterialAnmerkung || ''}
+                                    onChange={e => update('bezugsmaterialAnmerkung', e.target.value)}
+                                    placeholder="Ihre Wünsche..."
+                                    className="input-field"
+                                    style={{ minHeight: '80px' }}
+                                />
+                            </TwoColumnField>
+                        )}
+
                         {isSoftcover && formData.bezugsmaterial === 'Durchgefärbter Karton' && (
                             <TwoColumnField label="Durchgefärbter Karton Farbe">
                                 <div className="options-grid mb-3">
-                                    {['Name Farbe', 'Name Farbe', 'Name Farbe', 'Name Farbe'].map((farbe, idx) => (
+                                    {[
+                                        { id: 'Navy', name: 'Navy' },
+                                        { id: 'Rosé', name: 'Rosé' },
+                                        { id: 'Tomatenrot', name: 'Tomatenrot' },
+                                        { id: 'Bordeaux', name: 'Bordeaux' }
+                                    ].map(f => (
                                         <div
-                                            key={idx}
-                                            onClick={() => update('durchgefaerbterKartonFarbe', farbe + ' ' + (idx + 1))}
-                                            className={`option-card ${formData.durchgefaerbterKartonFarbe === farbe + ' ' + (idx + 1) ? 'active' : ''}`}
+                                            key={f.id}
+                                            onClick={() => update('durchgefaerbterKartonFarbe', f.id)}
+                                            className={`option-card ${formData.durchgefaerbterKartonFarbe === f.id ? 'active' : ''}`}
                                         >
                                             <div className="option-image-container">
-                                                <div style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    background: idx === 0 ? '#FF6B4A' : idx === 1 ? '#4A90E2' : idx === 2 ? '#F5E6D3' : '#D3C5B8',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
-                                                }}></div>
-                                                {formData.durchgefaerbterKartonFarbe === farbe + ' ' + (idx + 1) && (
+                                                <img
+                                                    src={BILDER.default}
+                                                    alt={f.name}
+                                                    onLoad={(e) => {
+                                                        e.target.classList.add('loaded');
+                                                        e.target.parentElement.classList.add('has-image');
+                                                    }}
+                                                    onError={(e) => {
+                                                        e.target.src = BILDER.default;
+                                                        e.target.classList.add('loaded');
+                                                        e.target.parentElement.classList.add('has-image');
+                                                    }}
+                                                />
+                                                {formData.durchgefaerbterKartonFarbe === f.id && (
                                                     <div className="option-checkmark">✓</div>
                                                 )}
                                             </div>
-                                            <div className="option-label">{farbe}</div>
+                                            <div className="option-label">{f.name}</div>
                                         </div>
                                     ))}
 
@@ -4018,7 +4505,7 @@
                                             </div>
                                         </div>
                                         <div className="option-label" style={{ background: 'white', color: 'black' }}>
-                                            &gt; PDF Download
+                                            PDF Download
                                         </div>
                                     </div>
                                 </div>
@@ -4040,12 +4527,12 @@
                             <>
                                 <TwoColumnField label={`Druck ${coverLabel} (U1 + U4)`} required>
                                     <div className="options-grid">
-                                        {druckBuchdeckeOpts.map(d => (
+                                        {(formData.bindeart?.startsWith('broschuere') ? druckBroschuereOpts : druckBuchdeckeOpts).map(d => (
                                             <div key={d.id} onClick={() => update('druckBuchdecke', d.id)}
                                                 className={`option-card ${formData.druckBuchdecke === d.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.druckBuchdecke.default}
+                                                        src={BILDER.druckBuchdecke[d.id] || BILDER.druckBuchdecke.default}
                                                         alt={d.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
@@ -4063,16 +4550,49 @@
                                             </div>
                                         ))}
                                     </div>
+
+                                    {isPappebuch && formData.druckBuchdecke && formData.druckBuchdecke !== 'Unbedruckt' && (
+                                        <div className="options-grid mt-4">
+                                            {druckPappebuchZusatzOpts.map(z => (
+                                                <div key={z.id} onClick={() => update('druckPappebuchZusatz', z.id)}
+                                                    className={`option-card ${formData.druckPappebuchZusatz === z.id ? 'active' : ''}`}>
+                                                    <div className="option-image-container">
+                                                        <img
+                                                            src={BILDER.druckBuchdecke[z.id] || BILDER.druckBuchdecke.default}
+                                                            alt={z.name}
+                                                            onLoad={(e) => {
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                            onError={(e) => {
+                                                                e.target.src = BILDER.default;
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                        />
+                                                        {formData.druckPappebuchZusatz === z.id && <div className="option-checkmark">✓</div>}
+                                                    </div>
+                                                    <div className="option-label">{z.name}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
                                     <p className="info-text mt-4">
-                                        Beim Druck unterscheidet man, ob das Papier ein- oder beidseitig bedruckt wird. Die erste Zahl (1, 2, 4, 5, 6/…) gibt an, mit wie vielen Farben die Vorderseite bedruckt wird. Die zweite Zahl zeigt, ob und wie die Rückseite bedruckt wird (z. B. 1/0 = einseitig einfarbig, 4/4 = beidseitig vierfarbig). Farbige Bücher sind meist 4-farbig gedruckt. HKS/Pantone sind Sonderfarben. CMYK ist eine Bezeichnung für den Standard-Farbraum aus Cyan, Magenta, Gelb und Schwarz (wählen Sie CMYK, wenn Sie normalen Farbdruck wollen).
+                                        Beim Druck unterscheidet man, ob das Papier ein- oder beidseitig bedruckt wird. Die erste Zahl (1, 2, 4, 5, 6/…) gibt an, mit wie vielen Farben die Vorderseite bedruckt wird. Die zweite Zahl zeigt, ob und wie die Rückseite bedruckt wird (z. B. 1/0 = einseitig einfarbig, 4/4 = beidseitig vierfarbig). Farbige Bücher sind meist 4-farbig gedruckt. HKS/Pantone sind Sonderfarben. CMYK ist eine Bezeichnung für den Standard-Farbraum aus Cyan, Magenta, Gelb und Schwarz (wählen Sie CMYK, wenn Sie normalen Farbdruck wollen).{isPappebuch && ' Ein Dispersionslack ist ein durchsichtiger Schutzlack. Sprechen Sie uns gerne an, wenn Sie wissen wollen, ob ein solcher Lack in Ihrem Fall empfehlenswert ist. HKS/Pantone-Farben sowie Dispersionslack sind nur ab einer Auflagenhöhe von 500 Exemplaren möglich'}
                                     </p>
                                 </TwoColumnField>
 
                                 {formData.druckBuchdecke && formData.druckBuchdecke !== 'Unbedruckt' && (
                                     <TwoColumnField label="Zusätzlich Dispersionslack?">
-                                        <div className="flex gap-4">
+                                        <div className="flex gap-4 mb-4">
                                             <button onClick={() => update('dispersionslackBuchdecke', 'ja')} className={`choice-button ${formData.dispersionslackBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
                                             <button onClick={() => update('dispersionslackBuchdecke', 'nein')} className={`choice-button ${formData.dispersionslackBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
+                                        </div>
+                                        <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                                            <p className="text-sm text-gray-700">
+                                                Ein Dispersionslack ist ein durchsichtiger Schutzlack. Sprechen Sie uns gerne an, wenn Sie wissen wollen, ob ein solcher Lack in Ihrem Fall empfehlenswert ist.
+                                            </p>
                                         </div>
                                     </TwoColumnField>
                                 )}
@@ -4092,7 +4612,7 @@
                                                                 className={`option-card ${formData.druckInnenTyp === d.id ? 'active' : ''}`}>
                                                                 <div className="option-image-container">
                                                                     <img
-                                                                        src={BILDER.druckInnen.default}
+                                                                        src={BILDER.druckInnen[d.id] || BILDER.druckInnen.default}
                                                                         alt={d.name}
                                                                         onLoad={(e) => {
                                                                             e.target.classList.add('loaded');
@@ -4119,9 +4639,14 @@
 
                                         {formData.druckInnen === 'ja' && formData.druckInnenTyp && formData.druckInnenTyp !== 'Unbedruckt' && (
                                             <TwoColumnField label="Zusätzlich Dispersionslack (U2 + U3)?">
-                                                <div className="flex gap-4">
+                                                <div className="flex gap-4 mb-4">
                                                     <button onClick={() => update('dispersionslackInnen', 'ja')} className={`choice-button ${formData.dispersionslackInnen === 'ja' ? 'active' : ''}`}>Ja</button>
                                                     <button onClick={() => update('dispersionslackInnen', 'nein')} className={`choice-button ${formData.dispersionslackInnen === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                </div>
+                                                <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                                                    <p className="text-sm text-gray-700">
+                                                        Ein Dispersionslack ist ein durchsichtiger Schutzlack. Sprechen Sie uns gerne an, wenn Sie wissen wollen, ob ein solcher Lack in Ihrem Fall empfehlenswert ist.
+                                                    </p>
                                                 </div>
                                             </TwoColumnField>
                                         )}
@@ -4139,7 +4664,7 @@
                                                                 className={`option-card ${formData.klappenTyp === k.id ? 'active' : ''}`}>
                                                                 <div className="option-image-container">
                                                                     <img
-                                                                        src={BILDER.klappen.default}
+                                                                        src={BILDER.klappen[k.id] || BILDER.klappen.default}
                                                                         alt={k.name}
                                                                         onLoad={(e) => {
                                                                             e.target.classList.add('loaded');
@@ -4177,7 +4702,7 @@
                                                             className={`option-card ${formData.folienkaschierungTyp === f.id ? 'active' : ''}`}>
                                                             <div className="option-image-container">
                                                                 <img
-                                                                    src={BILDER.folie.default}
+                                                                    src={BILDER.folie[f.id] || BILDER.folie.default}
                                                                     alt={f.name}
                                                                     onLoad={(e) => {
                                                                         e.target.classList.add('loaded');
@@ -4204,30 +4729,40 @@
                                                 <button onClick={() => update('lackierung', 'nein')} className={`choice-button ${formData.lackierung === 'nein' ? 'active' : ''}`}>Nein</button>
                                             </div>
                                             {formData.lackierung === 'ja' && (
-                                                <div className="options-grid">
-                                                    {lackierungOpts.map(l => (
-                                                        <div key={l.id} onClick={() => update('lackierungTyp', l.id)}
-                                                            className={`option-card ${formData.lackierungTyp === l.id ? 'active' : ''}`}>
-                                                            <div className="option-image-container">
-                                                                <img
-                                                                    src={BILDER.lackierung.default}
-                                                                    alt={l.name}
-                                                                    onLoad={(e) => {
-                                                                        e.target.classList.add('loaded');
-                                                                        e.target.parentElement.classList.add('has-image');
-                                                                    }}
-                                                                    onError={(e) => {
-                                                                        e.target.src = BILDER.default;
-                                                                        e.target.classList.add('loaded');
-                                                                        e.target.parentElement.classList.add('has-image');
-                                                                    }}
-                                                                />
-                                                                {formData.lackierungTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                <>
+                                                    <div className="options-grid mb-4">
+                                                        {lackierungOpts.map(l => (
+                                                            <div key={l.id} onClick={() => update('lackierungTyp', l.id)}
+                                                                className={`option-card ${formData.lackierungTyp === l.id ? 'active' : ''}`}>
+                                                                <div className="option-image-container">
+                                                                    <img
+                                                                        src={BILDER.lackierung[l.id] || BILDER.lackierung.default}
+                                                                        alt={l.name}
+                                                                        onLoad={(e) => {
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.src = BILDER.default;
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                    />
+                                                                    {formData.lackierungTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                                </div>
+                                                                <div className="option-label">{l.name}</div>
                                                             </div>
-                                                            <div className="option-label">{l.name}</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                        ))}
+                                                    </div>
+                                                    <label className="block mb-2 font-medium text-sm">Wunschlackierung hier notieren:</label>
+                                                    <textarea
+                                                        value={formData.lackierungAnmerkung || ''}
+                                                        onChange={e => update('lackierungAnmerkung', e.target.value)}
+                                                        placeholder="z.B. Spezielle Lackierung..."
+                                                        className="input-field"
+                                                        style={{ minHeight: '80px' }}
+                                                    />
+                                                </>
                                             )}
                                         </TwoColumnField>
                                     </>
@@ -4246,7 +4781,7 @@
                                                         className={`option-card ${formData.praegungTyp === p.id ? 'active' : ''}`}>
                                                         <div className="option-image-container">
                                                             <img
-                                                                src={BILDER.praegung.default}
+                                                                src={BILDER.praegung[p.id] || BILDER.praegung.default}
                                                                 alt={p.name}
                                                                 onLoad={(e) => {
                                                                     e.target.classList.add('loaded');
@@ -4315,7 +4850,7 @@
                                                     className={`option-card ${formData.buchruecken === r.id ? 'active' : ''}`}>
                                                     <div className="option-image-container">
                                                         <img
-                                                            src={BILDER.buchruecken.default}
+                                                            src={BILDER.buchruecken[r.id] || BILDER.buchruecken.default}
                                                             alt={r.name}
                                                             onLoad={(e) => {
                                                                 e.target.classList.add('loaded');
@@ -4346,8 +4881,12 @@
                     <div className="sticky-button">
                         <button onClick={() => {
                             if (isWireO) {
-                                if (!formData.bezugsmaterialDeckblatt || !formData.bezugsmaterialRueckblatt || !formData.druckBuchdecke) {
-                                    alert('Bitte Pflichtfelder für Deckblatt und Rückblatt ausfüllen');
+                                if (!formData.bezugsmaterialDeckblatt || !formData.druckDeckblatt) {
+                                    alert('Bitte alle Pflichtfelder für Deckblatt ausfüllen');
+                                    return;
+                                }
+                                if (!formData.bezugsmaterialRueckblatt || !formData.druckRueckblatt) {
+                                    alert('Bitte alle Pflichtfelder für Rückblatt ausfüllen');
                                     return;
                                 }
                             } else {
@@ -4388,6 +4927,7 @@
                 </div>
             );
         }
+
         // 🔥 STEP 7 - VORSATZ (MIT BILDERN + ANTI-FLICKER)
         function Step7({ formData, update, updateWithReset, add, rueckruf, nextStep, stepLabel, BILDER }) {
             const [a, setA] = useState(formData.anmerkungen?.step7 || '');
@@ -4428,7 +4968,7 @@
                                     className={`option-card ${formData.vorsatzTyp === opt.id ? 'active' : ''}`}>
                                     <div className="option-image-container">
                                         <img
-                                            src={BILDER.vorsatz.default}
+                                            src={BILDER.vorsatz[opt.id] || BILDER.vorsatz.default}
                                             alt={opt.name}
                                             onLoad={(e) => {
                                                 e.target.classList.add('loaded');
@@ -4457,7 +4997,7 @@
                                             className={`option-card ${formData.vorsatzPapier === p.id ? 'active' : ''}`}>
                                             <div className="option-image-container">
                                                 <img
-                                                    src={BILDER.vorsatzPapier.default}
+                                                    src={BILDER.vorsatzPapier[p.id] || BILDER.vorsatzPapier.default}
                                                     alt={p.name}
                                                     onLoad={(e) => {
                                                         e.target.classList.add('loaded');
@@ -4489,7 +5029,7 @@
                                                 className={`option-card ${formData.druckVorsatzTyp === d.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.druckVorsatz.default}
+                                                        src={BILDER.druckVorsatz[d.id] || BILDER.druckVorsatz.default}
                                                         alt={d.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
@@ -4514,9 +5054,14 @@
 
                     {formData.vorsatzTyp === 'Standard' && formData.druckVorsatz === 'ja' && (
                         <TwoColumnField label="Zusätzlich Dispersionslack?">
-                            <div className="flex gap-4">
+                            <div className="flex gap-4 mb-4">
                                 <button onClick={() => update('dispersionslackVorsatz', 'ja')} className={`choice-button ${formData.dispersionslackVorsatz === 'ja' ? 'active' : ''}`}>Ja</button>
                                 <button onClick={() => update('dispersionslackVorsatz', 'nein')} className={`choice-button ${formData.dispersionslackVorsatz === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                            <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                                <p className="text-sm text-gray-700">
+                                    Ein Dispersionslack ist ein durchsichtiger Schutzlack. Sprechen Sie uns gerne an, wenn Sie wissen wollen, ob ein solcher Lack in Ihrem Fall empfehlenswert ist.
+                                </p>
                             </div>
                         </TwoColumnField>
                     )}
@@ -4763,7 +5308,7 @@
                                                 className={`option-card ${formData.registerstanzungTyp === r.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.registerstanzung.default}
+                                                        src={BILDER.registerstanzung[r.id] || BILDER.registerstanzung.default}
                                                         alt={r.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
@@ -4808,7 +5353,7 @@
                                                 className={`option-card ${formData.gummibandFarbe === g.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.gummiband.default}
+                                                        src={BILDER.gummiband[g.id] || BILDER.gummiband.default}
                                                         alt={g.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
@@ -4847,10 +5392,11 @@
             const [a, setA] = useState(formData.anmerkungen?.step9 || '');
 
             const schutzumschlagMaterialOpts = [
-                { id: 'Bilderdruckpapier matt', name: 'Bilderdruckpapier matt' },
-                { id: 'Bilderdruckpapier glänzend', name: 'Bilderdruckpapier glänzend' },
-                { id: 'Naturpapier', name: 'Naturpapier' },
-                { id: 'Werkdruckpapier', name: 'Werkdruckpapier' }
+                { id: 'Bilderdruck matt 170g', name: 'Bilderdruck matt 170g' },
+                { id: 'Bilderdruck glänzend 170g', name: 'Bilderdruck glänzend 170g' },
+                { id: 'Naturpapier weiß 140g', name: 'Naturpapier weiß 140g' },
+                { id: 'Recycling Naturpapier 140g', name: 'Recycling Naturpapier 140g' },
+                { id: 'Recycling Bilderdruckpapier 170g', name: 'Recycling Bilderdruckpapier 170g' }
             ];
 
             const druckSchutzumschlagOpts = [
@@ -4859,7 +5405,23 @@
                 { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
                 { id: '4/0 CMYK', name: '4/0 CMYK' },
                 { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' },
-                { id: '6/0 CMYK + 2x HKS/Pantone', name: '6/0 CMYK + 2x HKS/Pantone' }
+            ];
+
+            const folienOpts = [
+                { id: 'Matte Folie', name: 'Matte Folie' },
+                { id: 'Matte Folie kratzfest', name: 'Matte Folie kratzfest' },
+                { id: 'Softtouchfolie', name: 'Softtouchfolie' },
+                { id: 'Folie mit Leinenoptik', name: 'Folie mit Leinenoptik' },
+                { id: 'Folie mit Lederoptik', name: 'Folie mit Lederoptik' }
+            ];
+
+            const lackierungOpts = [
+                { id: 'Dispersionslack glänzend', name: 'Dispersionslack glänzend' },
+                { id: 'Dispersionslack matt', name: 'Dispersionslack matt' },
+                { id: 'Spotlack', name: 'Spotlack' },
+                { id: '3D Lack', name: '3D Lack' },
+                { id: 'Glitzerlack Silber', name: 'Glitzerlack Silber' },
+                { id: 'Duftlack', name: 'Duftlack' }
             ];
 
             return (
@@ -4878,7 +5440,15 @@
                             <button onClick={() => update('schutzumschlag', 'ja')} className={`choice-button ${formData.schutzumschlag === 'ja' ? 'active' : ''}`}>Ja</button>
                             <button onClick={() => update('schutzumschlag', 'nein')} className={`choice-button ${formData.schutzumschlag === 'nein' ? 'active' : ''}`}>Nein</button>
                         </div>
-                        {formData.schutzumschlag === 'ja' && (
+                        <div className="bg-gray-50 border-l-4 border-gray-300 p-4">
+                            <p className="text-sm text-gray-700">
+                                Schutzumschläge werden oft bei Büchern mit festem Einband (Hardcover) eingesetzt. Sie können Gewebeeinbände oder Buchdecken, die mit offenem Papier bezogen sind, vor Schmutz und Lichteinstrahlung schützen. Heute dienen sie aber zumeist als Schmuck und um noch mehr Raum für Informationen über das Buch und seine/n Autor:in zu haben.
+                            </p>
+                        </div>
+                    </TwoColumnField>
+
+                    {formData.schutzumschlag === 'ja' && (
+                        <TwoColumnField label="Material" required>
                             <div className="options-grid">
                                 {schutzumschlagMaterialOpts.map(m => (
                                     <div key={m.id} onClick={() => update('schutzumschlagMaterial', m.id)}
@@ -4903,8 +5473,8 @@
                                     </div>
                                 ))}
                             </div>
-                        )}
-                    </TwoColumnField>
+                        </TwoColumnField>
+                    )}
 
                     {formData.schutzumschlag === 'ja' && (
                         <TwoColumnField label="Druck Schutzumschlag?">
@@ -4919,7 +5489,7 @@
                                             className={`option-card ${formData.druckSchutzumschlagTyp === d.id ? 'active' : ''}`}>
                                             <div className="option-image-container">
                                                 <img
-                                                    src={BILDER.druckSchutzumschlag.default}
+                                                    src={BILDER.druckSchutzumschlag[d.id] || BILDER.druckSchutzumschlag.default}
                                                     alt={d.name}
                                                     onLoad={(e) => {
                                                         e.target.classList.add('loaded');
@@ -4950,16 +5520,12 @@
                                 </div>
                                 {formData.folienkaschierungSchutzumschlag === 'ja' && (
                                     <div className="options-grid">
-                                        {[
-                                            { id: 'Matt', name: 'Matt' },
-                                            { id: 'Glänzend', name: 'Glänzend' },
-                                            { id: 'Soft-Touch', name: 'Soft-Touch' }
-                                        ].map(f => (
+                                        {folienOpts.map(f => (
                                             <div key={f.id} onClick={() => update('folienkaschierungSchutzumschlagTyp', f.id)}
                                                 className={`option-card ${formData.folienkaschierungSchutzumschlagTyp === f.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.folie.default}
+                                                        src={BILDER.folie[f.id] || BILDER.folie.default}
                                                         alt={f.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
@@ -4986,35 +5552,40 @@
                                     <button onClick={() => update('lackierungSchutzumschlag', 'nein')} className={`choice-button ${formData.lackierungSchutzumschlag === 'nein' ? 'active' : ''}`}>Nein</button>
                                 </div>
                                 {formData.lackierungSchutzumschlag === 'ja' && (
-                                    <div className="options-grid">
-                                        {[
-                                            { id: 'Glanzlack', name: 'Glanzlack' },
-                                            { id: 'Mattlack', name: 'Mattlack' },
-                                            { id: 'UV-Lack', name: 'UV-Lack' },
-                                            { id: 'Hybrid-Lack', name: 'Hybrid-Lack' }
-                                        ].map(l => (
-                                            <div key={l.id} onClick={() => update('lackierungSchutzumschlagTyp', l.id)}
-                                                className={`option-card ${formData.lackierungSchutzumschlagTyp === l.id ? 'active' : ''}`}>
-                                                <div className="option-image-container">
-                                                    <img
-                                                        src={BILDER.lackierung.default}
-                                                        alt={l.name}
-                                                        onLoad={(e) => {
-                                                            e.target.classList.add('loaded');
-                                                            e.target.parentElement.classList.add('has-image');
-                                                        }}
-                                                        onError={(e) => {
-                                                            e.target.src = BILDER.default;
-                                                            e.target.classList.add('loaded');
-                                                            e.target.parentElement.classList.add('has-image');
-                                                        }}
-                                                    />
-                                                    {formData.lackierungSchutzumschlagTyp === l.id && <div className="option-checkmark">✓</div>}
+                                    <>
+                                        <div className="options-grid mb-4">
+                                            {lackierungOpts.map(l => (
+                                                <div key={l.id} onClick={() => update('lackierungSchutzumschlagTyp', l.id)}
+                                                    className={`option-card ${formData.lackierungSchutzumschlagTyp === l.id ? 'active' : ''}`}>
+                                                    <div className="option-image-container">
+                                                        <img
+                                                            src={BILDER.lackierung[l.id] || BILDER.lackierung.default}
+                                                            alt={l.name}
+                                                            onLoad={(e) => {
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                            onError={(e) => {
+                                                                e.target.src = BILDER.default;
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                        />
+                                                        {formData.lackierungSchutzumschlagTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                    </div>
+                                                    <div className="option-label">{l.name}</div>
                                                 </div>
-                                                <div className="option-label">{l.name}</div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                            ))}
+                                        </div>
+                                        <label className="block mb-2 font-medium text-sm">Wunschlackierung hier notieren:</label>
+                                        <textarea
+                                            value={formData.lackierungSchutzumschlagAnmerkung || ''}
+                                            onChange={e => update('lackierungSchutzumschlagAnmerkung', e.target.value)}
+                                            placeholder="z.B. Spezielle Lackierung..."
+                                            className="input-field"
+                                            style={{ minHeight: '80px' }}
+                                        />
+                                    </>
                                 )}
                             </TwoColumnField>
 
@@ -5026,15 +5597,17 @@
                                 {formData.praegungSchutzumschlag === 'ja' && (
                                     <div className="options-grid">
                                         {[
-                                            { id: 'Blindprägung', name: 'Blindprägung' },
-                                            { id: 'Folienprägung', name: 'Folienprägung' },
-                                            { id: 'Reliefprägung', name: 'Reliefprägung' }
+                                            { id: 'Flachprägung mit Folie', name: 'Flachprägung mit Folie' },
+                                            { id: 'Tiefprägung Blind', name: 'Tiefprägung Blind' },
+                                            { id: 'Tiefprägung mit Folie', name: 'Tiefprägung mit Folie' },
+                                            { id: 'Hochprägung Blind', name: 'Hochprägung Blind' },
+                                            { id: 'Hochprägung mit Folie', name: 'Hochprägung mit Folie' }
                                         ].map(p => (
                                             <div key={p.id} onClick={() => update('praegungSchutzumschlagTyp', p.id)}
                                                 className={`option-card ${formData.praegungSchutzumschlagTyp === p.id ? 'active' : ''}`}>
                                                 <div className="option-image-container">
                                                     <img
-                                                        src={BILDER.praegung.default}
+                                                        src={BILDER.praegung[p.id] || BILDER.praegung.default}
                                                         alt={p.name}
                                                         onLoad={(e) => {
                                                             e.target.classList.add('loaded');
