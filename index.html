@@ -843,11 +843,35 @@
                 step: 4,
                 group: 'content',
                 getValue: (fd) => {
-                    if (!fd.spacer) return null;
-                    if (fd.spacer === 'ja' && fd.spacerFarbig === 'ja') {
-                        return 'Ja (farbig)';
+                    if (!fd.spacer || fd.spacer === 'nein') return fd.spacer;
+                    return 'Ja (1,5mm Seitenstärke)';
+                }
+            },
+
+            buchecken: {
+                label: 'Buchecken',
+                step: 4,
+                group: 'content',
+                getValue: (fd) => fd.buchecken
+            },
+
+            gestanzteKlappen: {
+                label: 'Gestanzte Klappen (Innenseite)',
+                step: 4,
+                group: 'content',
+                getValue: (fd) => fd.gestanzteKlappen
+            },
+
+            stanzenPappebuch: {
+                label: 'Stanzen (Innenseiten)',
+                step: 4,
+                group: 'content',
+                getValue: (fd) => {
+                    if (!fd.stanzenPappebuch || fd.stanzenPappebuch === 'nein') return fd.stanzenPappebuch;
+                    if (fd.stanzenPappebuchBeschreibung) {
+                        return `Ja (${fd.stanzenPappebuchBeschreibung.substring(0, 50)}${fd.stanzenPappebuchBeschreibung.length > 50 ? '...' : ''})`;
                     }
-                    return fd.spacer;
+                    return 'Ja';
                 }
             },
 
@@ -1019,14 +1043,22 @@
             },
 
             druckBuchdecke: {
-                label: 'Druck Buchdecke',
+                label: (fd) => {
+                    const isWireO = fd.bindeart === 'wire-o';
+                    const isSoftcover = fd.bindeart?.startsWith('softcover') || fd.bindeart?.startsWith('broschuere');
+                    return isWireO ? 'Druck Deckblatt' : (isSoftcover ? 'Druck Umschlag' : 'Druck Buchdecke');
+                },
                 step: 6,
                 group: 'cover',
                 getValue: (fd) => fd.druckBuchdecke
             },
 
             dispersionslackBuchdecke: {
-                label: 'Dispersionslack Buchdecke',
+                label: (fd) => {
+                    const isWireO = fd.bindeart === 'wire-o';
+                    const isSoftcover = fd.bindeart?.startsWith('softcover') || fd.bindeart?.startsWith('broschuere');
+                    return isWireO ? 'Dispersionslack Deckblatt' : (isSoftcover ? 'Dispersionslack Umschlag' : 'Dispersionslack Buchdecke');
+                },
                 step: 6,
                 group: 'cover',
                 getValue: (fd) => fd.dispersionslackBuchdecke
@@ -1063,7 +1095,11 @@
             },
 
             folienkaschierung: {
-                label: 'Folienkaschierung',
+                label: (fd) => {
+                    const isWireO = fd.bindeart === 'wire-o';
+                    const isSoftcover = fd.bindeart?.startsWith('softcover') || fd.bindeart?.startsWith('broschuere');
+                    return isWireO ? 'Folienkaschierung Deckblatt' : (isSoftcover ? 'Folienkaschierung Umschlag' : 'Folienkaschierung Buchdecke');
+                },
                 step: 6,
                 group: 'cover',
                 getValue: (fd) => {
@@ -1076,7 +1112,11 @@
             },
 
             lackierung: {
-                label: 'Lackierung',
+                label: (fd) => {
+                    const isWireO = fd.bindeart === 'wire-o';
+                    const isSoftcover = fd.bindeart?.startsWith('softcover') || fd.bindeart?.startsWith('broschuere');
+                    return isWireO ? 'Lackierung Deckblatt' : (isSoftcover ? 'Lackierung Umschlag' : 'Lackierung Buchdecke');
+                },
                 step: 6,
                 group: 'cover',
                 getValue: (fd) => {
@@ -1089,7 +1129,11 @@
             },
 
             praegung: {
-                label: 'Prägung',
+                label: (fd) => {
+                    const isWireO = fd.bindeart === 'wire-o';
+                    const isSoftcover = fd.bindeart?.startsWith('softcover') || fd.bindeart?.startsWith('broschuere');
+                    return isWireO ? 'Prägung Deckblatt' : (isSoftcover ? 'Prägung Umschlag' : 'Prägung Buchdecke');
+                },
                 step: 6,
                 group: 'cover',
                 getValue: (fd) => {
@@ -1158,14 +1202,14 @@
             },
 
             registerstanzung: {
-                label: 'Registerstanzung',
+                label: 'Registerstanzung Buchblock',
                 step: 8,
                 group: 'finishing',
                 getValue: (fd) => {
                     if (!fd.registerstanzung || fd.registerstanzung !== 'ja') return fd.registerstanzung;
                     const parts = [];
                     if (fd.registerstanzungTyp) parts.push(fd.registerstanzungTyp);
-                    if (fd.registerstanzungWunsch) parts.push(`(${fd.registerstanzungWunsch})`);
+                    if (fd.registerstanzungWunsch) parts.push(`(${fd.registerstanzungWunsch.substring(0, 50)}${fd.registerstanzungWunsch.length > 50 ? '...' : ''})`);
                     return parts.length > 0 ? parts.join(' ') : 'Ja';
                 }
             },
@@ -1202,11 +1246,10 @@
                 step: 8,
                 group: 'finishing',
                 getValue: (fd) => {
-                    if (!fd.einlegen || fd.einlegen !== 'ja') return fd.einlegen;
-                    const parts = [];
-                    if (fd.einlegenTyp) parts.push(fd.einlegenTyp);
-                    if (fd.einlegenBeschreibung) parts.push(`(${fd.einlegenBeschreibung})`);
-                    return parts.length > 0 ? parts.join(' ') : 'Ja';
+                    if (!fd.einlegen || fd.einlegen === '') return null;
+                    const parts = [fd.einlegen];
+                    if (fd.einlegenBeschreibung) parts.push(`(${fd.einlegenBeschreibung.substring(0, 50)}${fd.einlegenBeschreibung.length > 50 ? '...' : ''})`);
+                    return parts.join(' ');
                 }
             },
 
@@ -1226,7 +1269,12 @@
                 group: 'finishing',
                 getValue: (fd) => {
                     if (!fd.aufkleber || fd.aufkleber !== 'ja') return fd.aufkleber;
-                    return null; // Wird manuell behandelt wegen komplexer Struktur
+                    const parts = [];
+                    if (fd.aufkleberForm) parts.push(fd.aufkleberForm);
+                    if (fd.aufkleberMaterial) parts.push(fd.aufkleberMaterial);
+                    if (fd.aufkleberFarbigkeit) parts.push(fd.aufkleberFarbigkeit);
+                    if (fd.aufkleberGroesse) parts.push(fd.aufkleberGroesse);
+                    return parts.length > 0 ? parts.join(', ') : 'Ja';
                 }
             },
 
@@ -1237,6 +1285,36 @@
                 getValue: (fd) => {
                     if (!fd.schutzumschlag || fd.schutzumschlag !== 'ja') return fd.schutzumschlag;
                     return fd.schutzumschlagMaterial || 'Ja';
+                }
+            },
+
+            folienkaschierungSchutzumschlag: {
+                label: 'Folienkaschierung Schutzumschlag',
+                step: 9,
+                group: 'finishing',
+                getValue: (fd) => {
+                    if (!fd.folienkaschierungSchutzumschlag || fd.folienkaschierungSchutzumschlag !== 'ja') return fd.folienkaschierungSchutzumschlag;
+                    return fd.folienkaschierungSchutzumschlagTyp || 'Ja';
+                }
+            },
+
+            lackierungSchutzumschlag: {
+                label: 'Lackierung Schutzumschlag',
+                step: 9,
+                group: 'finishing',
+                getValue: (fd) => {
+                    if (!fd.lackierungSchutzumschlag || fd.lackierungSchutzumschlag !== 'ja') return fd.lackierungSchutzumschlag;
+                    return fd.lackierungSchutzumschlagTyp || 'Ja';
+                }
+            },
+
+            praegungSchutzumschlag: {
+                label: 'Prägung Schutzumschlag',
+                step: 9,
+                group: 'finishing',
+                getValue: (fd) => {
+                    if (!fd.praegungSchutzumschlag || fd.praegungSchutzumschlag !== 'ja') return fd.praegungSchutzumschlag;
+                    return fd.praegungSchutzumschlagTyp || 'Ja';
                 }
             },
 
@@ -1319,7 +1397,7 @@
                 const value = config.getValue(formData);
                 if (value && value !== '' && value !== null && value !== undefined) {
                     summary[config.group].push({
-                        label: config.label,
+                        label: typeof config.label === 'function' ? config.label(formData) : config.label,
                         value: value,
                         step: config.step
                     });
@@ -1430,10 +1508,14 @@
                 ringfarbe: '',
                 bezugsmaterialDeckblatt: '', durchgefaerbterKartonFarbeDeckblatt: '', durchgefaerbterKartonFarbeFreitextDeckblatt: '',
                 bezugsmaterialRueckblatt: '', durchgefaerbterKartonFarbeRueckblatt: '', durchgefaerbterKartonFarbeFreitextRueckblatt: '',
+                folienkaschierungRueckblatt: '', folienkaschierungRueckblattTyp: '',
+                lackierungRueckblatt: '', lackierungRueckblattTyp: '',
+                praegungRueckblatt: '', praegungRueckblattTyp: '',
                 registerstanzung: '', registerstanzungWunsch: '', registerstanzungTyp: '',
                 klammerfarbe: '', anzahlKlammern: '', umschlagAusfuehrung: '',
                 aufkleber: '', aufkleberGroesse: '', aufkleberAnbringen: '', aufkleberForm: '', aufkleberMaterial: '', aufkleberFarbigkeit: '',
-                karton: '', spacer: '', spacerFarbig: '', stanzungBuchdecke: '', stanzungTyp: ''
+                karton: '', spacer: '', spacerFarbig: '', stanzungBuchdecke: '', stanzungTyp: '',
+                gestanzteKlappen: '', stanzenPappebuch: '', stanzenPappebuchBeschreibung: ''
             });
 
             // ✅ HIER EINFÜGEN - DIREKT NACH useState:
@@ -1521,6 +1603,9 @@
                 folie: { default: './Bilder/papier/papier.jpg' },
                 lackierung: { default: './Bilder/papier/papier.jpg' },
                 praegung: { default: './Bilder/papier/papier.jpg' },
+                spacer: { default: './Bilder/papier/papier.jpg' },
+                gestanzteKlappen: { default: './Bilder/papier/papier.jpg' },
+                stanzen: { default: './Bilder/papier/papier.jpg' },
                 stanzung: {
                     'Beispielfoto 1': './Bilder/papier/papier.jpg',
                     'Beispielfoto 2': './Bilder/papier/papier.jpg',
@@ -1534,6 +1619,19 @@
                 einlegen: { default: './Bilder/papier/papier.jpg' },
                 gummiband: { default: './Bilder/papier/papier.jpg' },
                 aufkleber: { default: './Bilder/papier/papier.jpg' },
+                aufkleberForm: {
+                    'Rund': './Bilder/papier/papier.jpg',
+                    'Eckig': './Bilder/papier/papier.jpg'
+                },
+                aufkleberMaterial: {
+                    'Offsetpapier': './Bilder/papier/papier.jpg',
+                    'Papier matt kaschiert': './Bilder/papier/papier.jpg',
+                    'Papier glänzend kaschiert': './Bilder/papier/papier.jpg'
+                },
+                aufkleberFarbigkeit: {
+                    '1/0': './Bilder/papier/papier.jpg',
+                    '4/0 CMYK': './Bilder/papier/papier.jpg'
+                },
                 schutzumschlag: { default: './Bilder/papier/papier.jpg' },
                 druckSchutzumschlag: { default: './Bilder/papier/papier.jpg' },
                 default: './Bilder/papier/papier.jpg'
@@ -1563,11 +1661,37 @@
                     1: ['bindeart'],
                     2: ['format', 'individuellFormat', 'formatBreite', 'formatHoehe', 'formatOrientierung'],
                     3: ['scans', 'scansInsgesamt', 'layoutUndSatz', 'anzahlManuskriptseiten', 'gestaltungEinband', 'lektorat', 'gesamtseitenzahlManuskript'],
-                    4: ['seitenzahl', 'druckInnenteil', 'druckInnenteilSeitenzahlen', 'zusaetzlichDispersionslack', 'erweiterterFarbraum', 'erweiterterFarbraumTyp', 'beratungFarbraster', 'papier', 'papierSeitenzahlen', 'papierEingabeTyp', 'papierGrammatur', 'farbschnitt', 'farbschnittTyp', 'buchecken'],
-                    5: ['ausfuehrung', 'alternativeExemplare', 'alternativeExemplareVarianten', 'beratungAufschlag', 'garnfarbe', 'garnfarbeCustom', 'kapitalbandFarbe', 'kapitalbandCustom', 'lesebaendchenFarbe', 'lesebaendchenCustom', 'farbeFaelzelband', 'farbeFaelzelbandCustom'],
-                    6: ['bezugsmaterial', 'bezugsmaterialCustom', 'druckBuchdecke', 'dispersionslackBuchdecke', 'druckInnen', 'druckInnenTyp', 'dispersionslackInnen', 'klappenAmUmschlag', 'klappenTyp', 'durchgefaerbterKartonFarbe', 'durchgefaerbterKartonFarbeFreitext', 'folienkaschierung', 'folienkaschierungTyp', 'lackierung', 'lackierungTyp', 'praegung', 'praegungTyp', 'buchruecken'],
+                    4: [
+                        'seitenzahl', 'druckInnenteil', 'druckInnenteilSeitenzahlen', 'zusaetzlichDispersionslack',
+                        'erweiterterFarbraum', 'erweiterterFarbraumTyp', 'beratungFarbraster',
+                        'papier', 'papierSeitenzahlen', 'papierEingabeTyp', 'papierGrammatur',
+                        'farbschnitt', 'farbschnittTyp', 'buchecken',
+                        'karton', 'spacer', 'spacerFarbig'
+                    ],
+                    5: [
+                        'ausfuehrung', 'alternativeExemplare', 'alternativeExemplareVarianten',
+                        'beratungAufschlag', 'garnfarbe', 'garnfarbeCustom',
+                        'kapitalbandFarbe', 'kapitalbandCustom',
+                        'lesebaendchenFarbe', 'lesebaendchenCustom',
+                        'farbeFaelzelband', 'farbeFaelzelbandCustom',
+                        'ringfarbe', 'klammerfarbe', 'anzahlKlammern'
+                    ],
+                    6: [
+                        'bezugsmaterial', 'bezugsmaterialCustom',
+                        'druckBuchdecke', 'dispersionslackBuchdecke',
+                        'druckInnen', 'druckInnenTyp', 'dispersionslackInnen',
+                        'klappenAmUmschlag', 'klappenTyp',
+                        'durchgefaerbterKartonFarbe', 'durchgefaerbterKartonFarbeFreitext',
+                        'folienkaschierung', 'folienkaschierungTyp',
+                        'lackierung', 'lackierungTyp',
+                        'praegung', 'praegungTyp',
+                        'buchruecken', 'umschlagAusfuehrung',
+                        'bezugsmaterialDeckblatt', 'durchgefaerbterKartonFarbeDeckblatt', 'durchgefaerbterKartonFarbeFreitextDeckblatt',
+                        'bezugsmaterialRueckblatt', 'durchgefaerbterKartonFarbeRueckblatt', 'durchgefaerbterKartonFarbeFreitextRueckblatt',
+                        'stanzungBuchdecke', 'stanzungTyp'
+                    ],
                     7: ['vorsatzTyp', 'vorsatzPapier', 'druckVorsatz', 'druckVorsatzTyp', 'dispersionslackVorsatz'],
-                    8: ['einschweissen', 'banderolieren', 'konfektionieren', 'konfektionierenBeschreibung', 'einlegen', 'einlegenTyp', 'einlegenBeschreibung', 'gummiband', 'gummibandFarbe', 'gummibandCustom'],
+                    8: ['einschweissen', 'banderolieren', 'konfektionieren', 'konfektionierenBeschreibung', 'einlegen', 'einlegenTyp', 'einlegenBeschreibung', 'gummiband', 'gummibandFarbe', 'gummibandCustom', 'registerstanzung', 'registerstanzungWunsch', 'registerstanzungTyp', 'aufkleber', 'aufkleberGroesse', 'aufkleberAnbringen', 'aufkleberForm', 'aufkleberMaterial', 'aufkleberFarbigkeit'],
                     9: ['schutzumschlag', 'schutzumschlagMaterial', 'druckSchutzumschlag', 'druckSchutzumschlagTyp'],
                     10: ['druckdatenkorrektur', 'probeseiten', 'farbproof', 'druckdatenerstellung', 'vorabexemplar', 'formproof']
                 };
@@ -1664,11 +1788,13 @@
                     label: 'Veredelung',
                     show: formData.bindeart === 'wire-o'
                         ? (formData.bezugsmaterialDeckblatt && formData.bezugsmaterialRueckblatt)
-                        : formData.bindeart?.startsWith('broschuere')
-                            ? formData.bezugsmaterial
-                            : (formData.bezugsmaterial && (
-                                (formData.bindeart === 'hardcover-klebebindung' || formData.bindeart === 'hardcover-fadenheftung') ? formData.vorsatzTyp : true
-                            )),
+                        : formData.bindeart === 'pappebuch'
+                            ? formData.karton
+                            : formData.bindeart?.startsWith('broschuere')
+                                ? formData.bezugsmaterial
+                                : (formData.bezugsmaterial && (
+                                    (formData.bindeart === 'hardcover-klebebindung' || formData.bindeart === 'hardcover-fadenheftung') ? formData.vorsatzTyp : true
+                                )),
                     group: 'finishing'
                 },
                 {
@@ -1683,7 +1809,8 @@
                     show: currentStep >= 9 ||
                         (formData.bindeart?.startsWith('softcover') && currentStep >= 8) ||
                         (formData.bindeart === 'wire-o' && currentStep >= 8) ||
-                        (formData.bindeart?.startsWith('broschuere') && currentStep >= 8),
+                        (formData.bindeart?.startsWith('broschuere') && currentStep >= 8) ||
+                        (formData.bindeart === 'pappebuch' && currentStep >= 8),
                     group: 'final'
                 },
                 {
@@ -1692,7 +1819,8 @@
                     show: currentStep >= 10 ||
                         (formData.bindeart?.startsWith('softcover') && currentStep >= 9) ||
                         (formData.bindeart === 'wire-o' && currentStep >= 9) ||
-                        (formData.bindeart?.startsWith('broschuere') && currentStep >= 9),
+                        (formData.bindeart?.startsWith('broschuere') && currentStep >= 9) ||
+                        (formData.bindeart === 'pappebuch' && currentStep >= 9),
                     group: 'final'
                 },
                 {
@@ -1729,7 +1857,13 @@
                 basics: { label: 'Allgemeine Angaben' },
                 content: { label: 'Inhalt' },
                 binding: { label: 'Bindung' },
-                cover: { label: 'Buchdecke' },
+                cover: {
+                    label: formData.bindeart === 'wire-o'
+                        ? 'Deckblatt'
+                        : (formData.bindeart?.startsWith('softcover') || formData.bindeart?.startsWith('broschuere'))
+                            ? 'Umschlag'
+                            : 'Buchdecke'
+                },
                 finishing: { label: 'Veredelung' },
                 final: { label: 'Abschluss' }
             };
@@ -1757,10 +1891,10 @@
                                         ← Zurück
                                     </button>
                                     <div className="flex flex-wrap gap-2 flex-1">
-                                        {visibleSteps.map(s => (
+                                        {visibleSteps.map((s, index) => (
                                             <button key={s.id} onClick={() => s.id <= currentStep && setCurrentStep(s.id)}
                                                 className={`step-pill ${s.id === currentStep ? 'active' : s.id < currentStep ? 'completed' : 'disabled'}`}
-                                                disabled={s.id > currentStep}>{s.id}. {s.label}</button>
+                                                disabled={s.id > currentStep}>{index + 1}. {s.label}</button>
                                         ))}
                                     </div>
                                 </div>
@@ -1771,7 +1905,7 @@
                         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 border-bottom-black">
                             <div className="lg:col-span-1 flex items-center p-6">
                                 <h1 className="text-3xl font-bold main-title">
-                                    {currentStep}. {allSteps.find(s => s.id === currentStep)?.label || 'Bindeart'}
+                                    {visibleSteps.findIndex(s => s.id === currentStep) + 1}. {allSteps.find(s => s.id === currentStep)?.label || 'Bindeart'}
                                 </h1>
                             </div>
                             <div className="lg:col-span-3">
@@ -2236,12 +2370,15 @@
 
                             {formData.druckInnenteil.length > 0 && (
                                 <>
-                                    <TwoColumnField label="Zusätzlich Dispersionslack?">
-                                        <div className="flex gap-4">
-                                            <button onClick={() => update('zusaetzlichDispersionslack', 'ja')} className={`choice-button ${formData.zusaetzlichDispersionslack === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('zusaetzlichDispersionslack', 'nein')} className={`choice-button ${formData.zusaetzlichDispersionslack === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                    </TwoColumnField>
+                                    {formData.druckInnenteil && formData.druckInnenteil.length > 0 &&
+                                        formData.druckInnenteil.some(d => d !== 'unbedruckt') && (
+                                            <TwoColumnField label="Zusätzlich Dispersionslack?">
+                                                <div className="flex gap-4">
+                                                    <button onClick={() => update('zusaetzlichDispersionslack', 'ja')} className={`choice-button ${formData.zusaetzlichDispersionslack === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                    <button onClick={() => update('zusaetzlichDispersionslack', 'nein')} className={`choice-button ${formData.zusaetzlichDispersionslack === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                </div>
+                                            </TwoColumnField>
+                                        )}
 
                                     <TwoColumnField label="Erweiterter Farbraum?">
                                         <div className="flex gap-4 mb-4">
@@ -2324,26 +2461,176 @@
                                                 </div>
                                                 {formData.spacer === 'ja' && (
                                                     <>
-                                                        <div className="bg-gray-800 text-white p-4 rounded-lg mb-4">
-                                                            <p className="text-sm">
-                                                                <strong>1.5mm Seitenstärke</strong><br />
-                                                                Ein Spacer ist eine unbedruckte Pappe, die bei einem Pappebuch zwischen zwei bedruckte Seiten eingefügt wird. Die Seiten werden so noch einmal dicker und massiver. Wird öfters für Bücher für Kleinstkinder benutzt.
+                                                        <div className="options-grid">
+                                                            <div className="option-card active">
+                                                                <div className="option-image-container">
+                                                                    <img
+                                                                        src={BILDER.spacer.default}
+                                                                        alt="Spacer"
+                                                                        onLoad={(e) => {
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.src = BILDER.default;
+                                                                            e.target.classList.add('loaded');
+                                                                            e.target.parentElement.classList.add('has-image');
+                                                                        }}
+                                                                    />
+                                                                    <div className="option-checkmark">✓</div>
+                                                                </div>
+                                                                <div className="option-label" style={{ whiteSpace: 'pre-line' }}>Spacer 1,5mm\nSeitenstärke</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="bg-gray-50 border-l-4 border-gray-300 p-4 mt-4">
+                                                            <p className="text-sm text-gray-700">
+                                                                Ein Spacer ist eine unbedruckte Pappe, die bei einem Pappebuch zwischen zwei bedruckte Seiten eingefügt wird. Die Seiten werden so noch einmal dicker und massiver. Dies wird häufig bei Büchern für Kleinstkinder verwendet.
                                                             </p>
                                                         </div>
-                                                        <div>
-                                                            <label className="block mb-2 font-medium text-sm">Farbige Spacer:</label>
-                                                            <div className="flex gap-4 mb-4">
-                                                                <button onClick={() => update('spacerFarbig', 'ja')} className={`choice-button ${formData.spacerFarbig === 'ja' ? 'active' : ''}`}>Ja</button>
-                                                                <button onClick={() => update('spacerFarbig', 'nein')} className={`choice-button ${formData.spacerFarbig === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                    </>
+                                                )}
+                                            </TwoColumnField>
+
+                                            <TwoColumnField label="Farbschnitt">
+                                                <div className="options-grid">
+                                                    {[
+                                                        { id: 'Ohne Farbschnitt (Standard)', name: 'Ohne Farbschnitt\n(Standard)' },
+                                                        { id: 'Einfarbig CMYK', name: 'Einfarbig CMYK' },
+                                                        { id: 'Einfarbig HKS/Pantone', name: 'Einfarbig\nHKS/Pantone' },
+                                                        { id: 'Motiv CMYK', name: 'Motiv CMYK' },
+                                                        { id: 'Folienschnitt', name: 'Folienschnitt' }
+                                                    ].map(f => (
+                                                        <div key={f.id} onClick={() => update('farbschnittTyp', f.id)}
+                                                            className={`option-card ${(formData.farbschnittTyp === f.id || (!formData.farbschnittTyp && f.id === 'Ohne Farbschnitt (Standard)')) ? 'active' : ''}`}>
+                                                            <div className="option-image-container">
+                                                                <img
+                                                                    src={BILDER.farbschnitt.default}
+                                                                    alt={f.name}
+                                                                    onLoad={(e) => {
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = BILDER.default;
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                />
+                                                                {(formData.farbschnittTyp === f.id || (!formData.farbschnittTyp && f.id === 'Ohne Farbschnitt (Standard)')) && <div className="option-checkmark">✓</div>}
                                                             </div>
-                                                            {formData.spacerFarbig === 'ja' && (
-                                                                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
-                                                                    <p className="text-sm text-yellow-800">
-                                                                        💡 Platzhalter für Farben (aktuell keine verfügbar)
-                                                                    </p>
-                                                                </div>
-                                                            )}
+                                                            <div className="option-label" style={{ whiteSpace: 'pre-line' }}>{f.name}</div>
                                                         </div>
+                                                    ))}
+                                                </div>
+                                            </TwoColumnField>
+
+                                            <TwoColumnField label="Buchecken">
+                                                <div className="options-grid">
+                                                    {[
+                                                        { id: 'eckig', name: 'Eckig' },
+                                                        { id: 'rund', name: 'Rund' }
+                                                    ].map(opt => (
+                                                        <div key={opt.id} onClick={() => update('buchecken', opt.id)}
+                                                            className={`option-card ${formData.buchecken === opt.id ? 'active' : ''}`}>
+                                                            <div className="option-image-container">
+                                                                <img
+                                                                    src={BILDER.buchecken[opt.id] || BILDER.default}
+                                                                    alt={opt.name}
+                                                                    onLoad={(e) => {
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.src = BILDER.default;
+                                                                        e.target.classList.add('loaded');
+                                                                        e.target.parentElement.classList.add('has-image');
+                                                                    }}
+                                                                />
+                                                                {formData.buchecken === opt.id && <div className="option-checkmark">✓</div>}
+                                                            </div>
+                                                            <div className="option-label">{opt.name}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </TwoColumnField>
+
+                                            <TwoColumnField label="Gestanzte Klappen (Innenseite)?">
+                                                <div className="flex gap-4 mb-4">
+                                                    <button onClick={() => update('gestanzteKlappen', 'ja')} className={`choice-button ${formData.gestanzteKlappen === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                    <button onClick={() => update('gestanzteKlappen', 'nein')} className={`choice-button ${formData.gestanzteKlappen === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                </div>
+                                                {formData.gestanzteKlappen === 'ja' && (
+                                                    <>
+                                                        <p className="text-sm text-gray-600 mb-3">💡 Beispiele für gestanzte Klappen:</p>
+                                                        <div className="options-grid mb-4">
+                                                            {['Beispiel 1', 'Beispiel 2', 'Beispiel 3'].map((b, idx) => (
+                                                                <div key={b} className="option-card" style={{ cursor: 'default', opacity: 0.7, pointerEvents: 'none' }}>
+                                                                    <div className="option-image-container">
+                                                                        <img
+                                                                            src={BILDER.gestanzteKlappen.default}
+                                                                            alt={b}
+                                                                            onLoad={(e) => {
+                                                                                e.target.classList.add('loaded');
+                                                                                e.target.parentElement.classList.add('has-image');
+                                                                            }}
+                                                                            onError={(e) => {
+                                                                                e.target.src = BILDER.default;
+                                                                                e.target.classList.add('loaded');
+                                                                                e.target.parentElement.classList.add('has-image');
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="option-label" style={{ fontSize: '11px', color: '#666' }}>{b}<br />(nur zur Ansicht)</div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                                                            <p className="text-sm text-yellow-800">
+                                                                💡 Bitte Details zu den gestanzten Klappen in den Anmerkungen angeben
+                                                            </p>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </TwoColumnField>
+
+                                            <TwoColumnField label="Stanzen (Innenseiten)?">
+                                                <div className="flex gap-4 mb-4">
+                                                    <button onClick={() => update('stanzenPappebuch', 'ja')} className={`choice-button ${formData.stanzenPappebuch === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                    <button onClick={() => update('stanzenPappebuch', 'nein')} className={`choice-button ${formData.stanzenPappebuch === 'nein' ? 'active' : ''}`}>Nein</button>
+                                                </div>
+                                                {formData.stanzenPappebuch === 'ja' && (
+                                                    <>
+                                                        <p className="text-sm text-gray-600 mb-3">💡 Beispiele für Stanzungen:</p>
+                                                        <div className="options-grid mb-4">
+                                                            {['Beispiel 1', 'Beispiel 2'].map((b, idx) => (
+                                                                <div key={b} className="option-card" style={{ cursor: 'default', opacity: 0.7, pointerEvents: 'none' }}>
+                                                                    <div className="option-image-container">
+                                                                        <img
+                                                                            src={BILDER.stanzen.default}
+                                                                            alt={b}
+                                                                            onLoad={(e) => {
+                                                                                e.target.classList.add('loaded');
+                                                                                e.target.parentElement.classList.add('has-image');
+                                                                            }}
+                                                                            onError={(e) => {
+                                                                                e.target.src = BILDER.default;
+                                                                                e.target.classList.add('loaded');
+                                                                                e.target.parentElement.classList.add('has-image');
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="option-label" style={{ fontSize: '11px', color: '#666' }}>{b}<br />(nur zur Ansicht)</div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <label className="block mb-2 font-medium text-sm">Bitte Wunsch beschreiben:</label>
+                                                        <textarea
+                                                            value={formData.stanzenPappebuchBeschreibung || ''}
+                                                            onChange={e => update('stanzenPappebuchBeschreibung', e.target.value)}
+                                                            placeholder="z.B. Kreisförmige Stanzung auf Seite 3, Durchmesser 50mm..."
+                                                            className="input-field"
+                                                            style={{ minHeight: '80px' }}
+                                                        />
                                                     </>
                                                 )}
                                             </TwoColumnField>
@@ -3121,18 +3408,18 @@
 
             const druckBuchdeckeOpts = [
                 { id: 'Unbedruckt', name: 'Unbedruckt' },
-                { id: '1/0', name: '1/0' },
-                { id: '2/0 (Schwarz + HKS/Pantone)', name: '2/0 (Schwarz + HKS/Pantone)' },
-                { id: '4/0 (CMYK)', name: '4/0 (CMYK)' },
-                { id: '5/0 (CMYK + HKS/Pantone)', name: '5/0 (CMYK + HKS/Pantone)' }
+                { id: '1/0', name: '1/0 Schwarz' },
+                { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
+                { id: '4/0 CMYK', name: '4/0 CMYK' },
+                { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' }
             ];
 
             const druckInnenOpts = [
                 { id: 'Unbedruckt', name: 'Unbedruckt' },
-                { id: '1/0', name: '1/0' },
-                { id: '2/0 (Schwarz + HKS/Pantone)', name: '2/0 (Schwarz + HKS/Pantone)' },
-                { id: '4/0 (CMYK)', name: '4/0 (CMYK)' },
-                { id: '5/0 (CMYK + HKS/Pantone)', name: '5/0 (CMYK + HKS/Pantone)' }
+                { id: '1/0', name: '1/0 Schwarz' },
+                { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
+                { id: '4/0 CMYK', name: '4/0 CMYK' },
+                { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' }
             ];
 
             const klappenOpts = [
@@ -3429,12 +3716,14 @@
                                         </p>
                                     </TwoColumnField>
 
-                                    <TwoColumnField label={`Zusätzlich Dispersionslack (U1 + U4)?`}>
-                                        <div className="flex gap-4">
-                                            <button onClick={() => update('dispersionslackBuchdecke', 'ja')} className={`choice-button ${formData.dispersionslackBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
-                                            <button onClick={() => update('dispersionslackBuchdecke', 'nein')} className={`choice-button ${formData.dispersionslackBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
-                                        </div>
-                                    </TwoColumnField>
+                                    {formData.druckBuchdecke && formData.druckBuchdecke !== 'Unbedruckt' && (
+                                        <TwoColumnField label={`Zusätzlich Dispersionslack (U1 + U4)?`}>
+                                            <div className="flex gap-4">
+                                                <button onClick={() => update('dispersionslackBuchdecke', 'ja')} className={`choice-button ${formData.dispersionslackBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
+                                                <button onClick={() => update('dispersionslackBuchdecke', 'nein')} className={`choice-button ${formData.dispersionslackBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
+                                            </div>
+                                        </TwoColumnField>
+                                    )}
 
                                     <TwoColumnField label={`Folienkaschierung ${coverLabel}?`}>
                                         <div className="flex gap-4 mb-4">
@@ -3527,6 +3816,118 @@
                                                                 }}
                                                             />
                                                             {formData.praegungTyp === p.id && <div className="option-checkmark">✓</div>}
+                                                        </div>
+                                                        <div className="option-label">{p.name}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </TwoColumnField>
+
+                                    <TwoColumnField label="Folienkaschierung Rückblatt?">
+                                        <div className="flex gap-4 mb-4">
+                                            <button onClick={() => update('folienkaschierungRueckblatt', 'ja')} className={`choice-button ${formData.folienkaschierungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                            <button onClick={() => update('folienkaschierungRueckblatt', 'nein')} className={`choice-button ${formData.folienkaschierungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                        </div>
+                                        {formData.folienkaschierungRueckblatt === 'ja' && (
+                                            <div className="options-grid">
+                                                {[
+                                                    { id: 'Matt', name: 'Matt' },
+                                                    { id: 'Glänzend', name: 'Glänzend' },
+                                                    { id: 'Soft-Touch', name: 'Soft-Touch' }
+                                                ].map(f => (
+                                                    <div key={f.id} onClick={() => update('folienkaschierungRueckblattTyp', f.id)}
+                                                        className={`option-card ${formData.folienkaschierungRueckblattTyp === f.id ? 'active' : ''}`}>
+                                                        <div className="option-image-container">
+                                                            <img
+                                                                src={BILDER.folie.default}
+                                                                alt={f.name}
+                                                                onLoad={(e) => {
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                                onError={(e) => {
+                                                                    e.target.src = BILDER.default;
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                            />
+                                                            {formData.folienkaschierungRueckblattTyp === f.id && <div className="option-checkmark">✓</div>}
+                                                        </div>
+                                                        <div className="option-label">{f.name}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </TwoColumnField>
+
+                                    <TwoColumnField label="Lackierung Rückblatt?">
+                                        <div className="flex gap-4 mb-4">
+                                            <button onClick={() => update('lackierungRueckblatt', 'ja')} className={`choice-button ${formData.lackierungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                            <button onClick={() => update('lackierungRueckblatt', 'nein')} className={`choice-button ${formData.lackierungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                        </div>
+                                        {formData.lackierungRueckblatt === 'ja' && (
+                                            <div className="options-grid">
+                                                {[
+                                                    { id: 'Glanzlack', name: 'Glanzlack' },
+                                                    { id: 'Mattlack', name: 'Mattlack' },
+                                                    { id: 'UV-Lack', name: 'UV-Lack' },
+                                                    { id: 'Hybrid-Lack', name: 'Hybrid-Lack' }
+                                                ].map(l => (
+                                                    <div key={l.id} onClick={() => update('lackierungRueckblattTyp', l.id)}
+                                                        className={`option-card ${formData.lackierungRueckblattTyp === l.id ? 'active' : ''}`}>
+                                                        <div className="option-image-container">
+                                                            <img
+                                                                src={BILDER.lackierung.default}
+                                                                alt={l.name}
+                                                                onLoad={(e) => {
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                                onError={(e) => {
+                                                                    e.target.src = BILDER.default;
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                            />
+                                                            {formData.lackierungRueckblattTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                        </div>
+                                                        <div className="option-label">{l.name}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </TwoColumnField>
+
+                                    <TwoColumnField label="Prägung Rückblatt?">
+                                        <div className="flex gap-4 mb-4">
+                                            <button onClick={() => update('praegungRueckblatt', 'ja')} className={`choice-button ${formData.praegungRueckblatt === 'ja' ? 'active' : ''}`}>Ja</button>
+                                            <button onClick={() => update('praegungRueckblatt', 'nein')} className={`choice-button ${formData.praegungRueckblatt === 'nein' ? 'active' : ''}`}>Nein</button>
+                                        </div>
+                                        {formData.praegungRueckblatt === 'ja' && (
+                                            <div className="options-grid">
+                                                {[
+                                                    { id: 'Blindprägung', name: 'Blindprägung' },
+                                                    { id: 'Folienprägung', name: 'Folienprägung' },
+                                                    { id: 'Reliefprägung', name: 'Reliefprägung' }
+                                                ].map(p => (
+                                                    <div key={p.id} onClick={() => update('praegungRueckblattTyp', p.id)}
+                                                        className={`option-card ${formData.praegungRueckblattTyp === p.id ? 'active' : ''}`}>
+                                                        <div className="option-image-container">
+                                                            <img
+                                                                src={BILDER.praegung.default}
+                                                                alt={p.name}
+                                                                onLoad={(e) => {
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                                onError={(e) => {
+                                                                    e.target.src = BILDER.default;
+                                                                    e.target.classList.add('loaded');
+                                                                    e.target.parentElement.classList.add('has-image');
+                                                                }}
+                                                            />
+                                                            {formData.praegungRueckblattTyp === p.id && <div className="option-checkmark">✓</div>}
                                                         </div>
                                                         <div className="option-label">{p.name}</div>
                                                     </div>
@@ -3667,12 +4068,14 @@
                                     </p>
                                 </TwoColumnField>
 
-                                <TwoColumnField label={`Zusätzlich Dispersionslack (U1 + U4)?`}>
-                                    <div className="flex gap-4">
-                                        <button onClick={() => update('dispersionslackBuchdecke', 'ja')} className={`choice-button ${formData.dispersionslackBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
-                                        <button onClick={() => update('dispersionslackBuchdecke', 'nein')} className={`choice-button ${formData.dispersionslackBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
-                                    </div>
-                                </TwoColumnField>
+                                {formData.druckBuchdecke && formData.druckBuchdecke !== 'Unbedruckt' && (
+                                    <TwoColumnField label="Zusätzlich Dispersionslack?">
+                                        <div className="flex gap-4">
+                                            <button onClick={() => update('dispersionslackBuchdecke', 'ja')} className={`choice-button ${formData.dispersionslackBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
+                                            <button onClick={() => update('dispersionslackBuchdecke', 'nein')} className={`choice-button ${formData.dispersionslackBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
+                                        </div>
+                                    </TwoColumnField>
+                                )}
 
                                 {isSoftcover && (
                                     <>
@@ -3714,7 +4117,7 @@
                                             )}
                                         </TwoColumnField>
 
-                                        {formData.druckInnen === 'ja' && (
+                                        {formData.druckInnen === 'ja' && formData.druckInnenTyp && formData.druckInnenTyp !== 'Unbedruckt' && (
                                             <TwoColumnField label="Zusätzlich Dispersionslack (U2 + U3)?">
                                                 <div className="flex gap-4">
                                                     <button onClick={() => update('dispersionslackInnen', 'ja')} className={`choice-button ${formData.dispersionslackInnen === 'ja' ? 'active' : ''}`}>Ja</button>
@@ -3865,8 +4268,8 @@
                                     </TwoColumnField>
                                 )}
 
-                                {isPappebuch && (
-                                    <TwoColumnField label="Stanzung Buchdecke?">
+                                {isPappebuch && formData.ausfuehrung === 'Layflatbindung (Integralbindung)' && (
+                                    <TwoColumnField label="Stanzung Umschlag?">
                                         <div className="flex gap-4 mb-4">
                                             <button onClick={() => update('stanzungBuchdecke', 'ja')} className={`choice-button ${formData.stanzungBuchdecke === 'ja' ? 'active' : ''}`}>Ja</button>
                                             <button onClick={() => update('stanzungBuchdecke', 'nein')} className={`choice-button ${formData.stanzungBuchdecke === 'nein' ? 'active' : ''}`}>Nein</button>
@@ -4109,12 +4512,14 @@
                         </>
                     )}
 
-                    <TwoColumnField label="Zusätzlich Dispersionslack?">
-                        <div className="flex gap-4">
-                            <button onClick={() => update('dispersionslackVorsatz', 'ja')} className={`choice-button ${formData.dispersionslackVorsatz === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('dispersionslackVorsatz', 'nein')} className={`choice-button ${formData.dispersionslackVorsatz === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                    </TwoColumnField>
+                    {formData.vorsatzTyp === 'Standard' && formData.druckVorsatz === 'ja' && (
+                        <TwoColumnField label="Zusätzlich Dispersionslack?">
+                            <div className="flex gap-4">
+                                <button onClick={() => update('dispersionslackVorsatz', 'ja')} className={`choice-button ${formData.dispersionslackVorsatz === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('dispersionslackVorsatz', 'nein')} className={`choice-button ${formData.dispersionslackVorsatz === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                        </TwoColumnField>
+                    )}
 
                     <div className="mb-6"><label className="block font-medium mb-2">Anmerkungen:</label><textarea value={a} onChange={e => { setA(e.target.value); add('step7', e.target.value); }} placeholder="Ihre Anmerkungen" className="input-field" style={{ minHeight: '96px' }} /></div>
                     <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4"><p className="text-sm text-blue-800">💡 Wenn Sie jetzt "Rückruf vereinbaren" klicken, senden wir Ihre bisherigen Angaben an unser Team.</p></div>
@@ -4136,11 +4541,20 @@
         function Step8({ formData, update, updateWithReset, add, rueckruf, nextStep, stepLabel, BILDER }) {
             const [a, setA] = useState(formData.anmerkungen?.step8 || '');
 
-            const einlegenOpts = [
-                { id: 'Lose beilegen', name: 'Lose beilegen' },
-                { id: 'Einkleben', name: 'Einkleben' },
-                { id: 'Einstecken in eine Tasche', name: 'Einstecken in eine Tasche' }
-            ];
+            const isHardcover = formData.bindeart === 'hardcover-klebebindung' || formData.bindeart === 'hardcover-fadenheftung';
+            const isSoftcover = formData.bindeart?.startsWith('softcover');
+            const isWireO = formData.bindeart === 'wire-o';
+            const isBroschuere = formData.bindeart?.startsWith('broschuere');
+            const isPappebuch = formData.bindeart === 'pappebuch';
+
+            // Registerstanzung für alle außer Broschüren
+            const showRegisterstanzung = isHardcover || isSoftcover || isWireO || isPappebuch;
+
+            // Aufkleber, Einschweissen, Banderolieren, Konfektionieren für alle außer Wire-O
+            const showNonWireO = !isWireO;
+
+            // Gummiband nur für Hardcover
+            const showGummiband = isHardcover;
 
             const gummibandFarben = [
                 { id: 'Schwarz', name: 'Schwarz' },
@@ -4161,224 +4575,262 @@
                         </button>
                     </div>
 
-                    <TwoColumnField label="Registerstanzung?">
-                        <div className="flex gap-4 mb-4">
-                            <button onClick={() => update('registerstanzung', 'ja')} className={`choice-button ${formData.registerstanzung === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('registerstanzung', 'nein')} className={`choice-button ${formData.registerstanzung === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                        {formData.registerstanzung === 'ja' && (
-                            <>
-                                <div className="options-grid mb-4">
-                                    {[
-                                        { id: 'Registerstanzung beschriftet', name: 'Registerstanzung beschriftet' },
-                                        { id: 'Registerstanzung unbeschriftet', name: 'Registerstanzung unbeschriftet' }
-                                    ].map(r => (
-                                        <div key={r.id} onClick={() => update('registerstanzungTyp', r.id)}
-                                            className={`option-card ${formData.registerstanzungTyp === r.id ? 'active' : ''}`}>
-                                            <div className="option-image-container">
-                                                <img
-                                                    src={BILDER.registerstanzung.default}
-                                                    alt={r.name}
-                                                    onLoad={(e) => {
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                    onError={(e) => {
-                                                        e.target.src = BILDER.default;
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                />
-                                                {formData.registerstanzungTyp === r.id && <div className="option-checkmark">✓</div>}
-                                            </div>
-                                            <div className="option-label">{r.name}</div>
+                    {showNonWireO && (
+                        <TwoColumnField label="Einschweissen?">
+                            <div className="flex gap-4">
+                                <button onClick={() => update('einschweissen', 'ja')} className={`choice-button ${formData.einschweissen === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('einschweissen', 'nein')} className={`choice-button ${formData.einschweissen === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                        </TwoColumnField>
+                    )}
+
+                    {showNonWireO && (
+                        <TwoColumnField label="Banderolieren?">
+                            <div className="flex gap-4">
+                                <button onClick={() => update('banderolieren', 'ja')} className={`choice-button ${formData.banderolieren === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('banderolieren', 'nein')} className={`choice-button ${formData.banderolieren === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                        </TwoColumnField>
+                    )}
+
+                    {showNonWireO && (
+                        <TwoColumnField label="Aufkleber?">
+                            <div className="flex gap-4 mb-4">
+                                <button onClick={() => update('aufkleber', 'ja')} className={`choice-button ${formData.aufkleber === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('aufkleber', 'nein')} className={`choice-button ${formData.aufkleber === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                            {formData.aufkleber === 'ja' && (
+                                <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <label className="block mb-3 font-medium text-sm">Form:</label>
+                                        <div className="options-grid">
+                                            {[
+                                                { id: 'Rund', name: 'Rund' },
+                                                { id: 'Eckig', name: 'Eckig' }
+                                            ].map(f => (
+                                                <div key={f.id} onClick={() => update('aufkleberForm', f.id)}
+                                                    className={`option-card ${formData.aufkleberForm === f.id ? 'active' : ''}`}>
+                                                    <div className="option-image-container">
+                                                        <img
+                                                            src={BILDER.aufkleberForm[f.id] || BILDER.default}
+                                                            alt={f.name}
+                                                            onLoad={(e) => {
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                            onError={(e) => {
+                                                                e.target.src = BILDER.default;
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                        />
+                                                        {formData.aufkleberForm === f.id && <div className="option-checkmark">✓</div>}
+                                                    </div>
+                                                    <div className="option-label">{f.name}</div>
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-3 font-medium text-sm">Material:</label>
+                                        <div className="options-grid">
+                                            {[
+                                                { id: 'Offsetpapier', name: 'Offsetpapier' },
+                                                { id: 'Papier matt kaschiert', name: 'Papier matt\nkaschiert' },
+                                                { id: 'Papier glänzend kaschiert', name: 'Papier glänzend\nkaschiert' }
+                                            ].map(m => (
+                                                <div key={m.id} onClick={() => update('aufkleberMaterial', m.id)}
+                                                    className={`option-card ${formData.aufkleberMaterial === m.id ? 'active' : ''}`}>
+                                                    <div className="option-image-container">
+                                                        <img
+                                                            src={BILDER.aufkleberMaterial[m.id] || BILDER.default}
+                                                            alt={m.name}
+                                                            onLoad={(e) => {
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                            onError={(e) => {
+                                                                e.target.src = BILDER.default;
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                        />
+                                                        {formData.aufkleberMaterial === m.id && <div className="option-checkmark">✓</div>}
+                                                    </div>
+                                                    <div className="option-label" style={{ whiteSpace: 'pre-line' }}>{m.name}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-3 font-medium text-sm">Farbigkeit:</label>
+                                        <div className="options-grid">
+                                            {[
+                                                { id: '1/0', name: '1/0' },
+                                                { id: '4/0 CMYK', name: '4/0 CMYK' }
+                                            ].map(fa => (
+                                                <div key={fa.id} onClick={() => update('aufkleberFarbigkeit', fa.id)}
+                                                    className={`option-card ${formData.aufkleberFarbigkeit === fa.id ? 'active' : ''}`}>
+                                                    <div className="option-image-container">
+                                                        <img
+                                                            src={BILDER.aufkleberFarbigkeit[fa.id] || BILDER.default}
+                                                            alt={fa.name}
+                                                            onLoad={(e) => {
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                            onError={(e) => {
+                                                                e.target.src = BILDER.default;
+                                                                e.target.classList.add('loaded');
+                                                                e.target.parentElement.classList.add('has-image');
+                                                            }}
+                                                        />
+                                                        {formData.aufkleberFarbigkeit === fa.id && <div className="option-checkmark">✓</div>}
+                                                    </div>
+                                                    <div className="option-label">{fa.name}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-medium text-sm">Größe des Aufklebers:</label>
+                                        <input type="text" value={formData.aufkleberGroesse || ''} onChange={e => update('aufkleberGroesse', e.target.value)} placeholder="z.B. 50x50mm" className="input-field" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-2 font-medium text-sm">Anbringen:</label>
+                                        <select value={formData.aufkleberAnbringen || ''} onChange={e => update('aufkleberAnbringen', e.target.value)} className="input-field">
+                                            <option value="">Bitte wählen...</option>
+                                            <option value="Vorderseite">Vorderseite</option>
+                                            <option value="Rückseite">Rückseite</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <label className="block mb-2 font-medium text-sm">Bitte Wunsch beschreiben:</label>
-                                <textarea
-                                    value={formData.registerstanzungWunsch || ''}
-                                    onChange={e => update('registerstanzungWunsch', e.target.value)}
-                                    placeholder="z.B. Anzahl Register, Beschriftung, Position..."
-                                    className="input-field"
-                                    style={{ minHeight: '80px' }}
-                                />
-                            </>
-                        )}
-                    </TwoColumnField>
+                            )}
+                        </TwoColumnField>
+                    )}
 
-                    <TwoColumnField label="Einschweissen?">
-                        <div className="flex gap-4">
-                            <button onClick={() => update('einschweissen', 'ja')} className={`choice-button ${formData.einschweissen === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('einschweissen', 'nein')} className={`choice-button ${formData.einschweissen === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                    </TwoColumnField>
-
-                    <TwoColumnField label="Banderolieren?">
-                        <div className="flex gap-4">
-                            <button onClick={() => update('banderolieren', 'ja')} className={`choice-button ${formData.banderolieren === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('banderolieren', 'nein')} className={`choice-button ${formData.banderolieren === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                    </TwoColumnField>
-
-                    <TwoColumnField label="Konfektionieren?">
-                        <div className="flex gap-4 mb-4">
-                            <button onClick={() => update('konfektionieren', 'ja')} className={`choice-button ${formData.konfektionieren === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('konfektionieren', 'nein')} className={`choice-button ${formData.konfektionieren === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                        {formData.konfektionieren === 'ja' && (
-                            <>
-                                <label className="block mb-2 font-medium text-sm">Beschreibung:</label>
-                                <textarea value={formData.konfektionierenBeschreibung || ''} onChange={e => update('konfektionierenBeschreibung', e.target.value)} placeholder="z.B. in Kartons verpacken, etikettieren..." className="input-field" style={{ minHeight: '80px' }} />
-                            </>
-                        )}
-                    </TwoColumnField>
+                    {showNonWireO && (
+                        <TwoColumnField label="Konfektionieren?">
+                            <div className="flex gap-4 mb-4">
+                                <button onClick={() => update('konfektionieren', 'ja')} className={`choice-button ${formData.konfektionieren === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('konfektionieren', 'nein')} className={`choice-button ${formData.konfektionieren === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                            {formData.konfektionieren === 'ja' && (
+                                <>
+                                    <label className="block mb-2 font-medium text-sm">Beschreibung:</label>
+                                    <textarea value={formData.konfektionierenBeschreibung || ''} onChange={e => update('konfektionierenBeschreibung', e.target.value)} placeholder="z.B. in Kartons verpacken, etikettieren..." className="input-field" style={{ minHeight: '80px' }} />
+                                </>
+                            )}
+                        </TwoColumnField>
+                    )}
 
                     <TwoColumnField label="Einlegen?">
-                        <div className="flex gap-4 mb-4">
-                            <button onClick={() => update('einlegen', 'ja')} className={`choice-button ${formData.einlegen === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('einlegen', 'nein')} className={`choice-button ${formData.einlegen === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                        {formData.einlegen === 'ja' && (
+                        <select value={formData.einlegen || ''} onChange={e => update('einlegen', e.target.value)} className="input-field">
+                            <option value="">Nein</option>
+                            <option value="1 Teil an bestimmter Stelle">1 Teil an bestimmter Stelle</option>
+                            <option value="1 Teil an unbestimmter Stelle">1 Teil an unbestimmter Stelle</option>
+                            <option value="2 Teile an bestimmter Stelle">2 Teile an bestimmter Stelle</option>
+                            <option value="2 Teile an unbestimmter Stelle">2 Teile an unbestimmter Stelle</option>
+                        </select>
+                        {formData.einlegen && formData.einlegen !== '' && (
                             <>
-                                <div className="options-grid mb-4">
-                                    {einlegenOpts.map(e => (
-                                        <div key={e.id} onClick={() => update('einlegenTyp', e.id)}
-                                            className={`option-card ${formData.einlegenTyp === e.id ? 'active' : ''}`}>
-                                            <div className="option-image-container">
-                                                <img
-                                                    src={BILDER.einlegen.default}
-                                                    alt={e.name}
-                                                    onLoad={(ev) => {
-                                                        ev.target.classList.add('loaded');
-                                                        ev.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                    onError={(ev) => {
-                                                        ev.target.src = BILDER.default;
-                                                        ev.target.classList.add('loaded');
-                                                        ev.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                />
-                                                {formData.einlegenTyp === e.id && <div className="option-checkmark">✓</div>}
-                                            </div>
-                                            <div className="option-label">{e.name}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <label className="block mb-2 font-medium text-sm">Beschreibung:</label>
+                                <label className="block mb-2 font-medium text-sm mt-4">Beschreibung:</label>
                                 <textarea value={formData.einlegenBeschreibung || ''} onChange={e => update('einlegenBeschreibung', e.target.value)} placeholder="Was soll eingelegt werden?" className="input-field" style={{ minHeight: '80px' }} />
                             </>
                         )}
                     </TwoColumnField>
 
-                    <TwoColumnField label="Gummiband?">
-                        <div className="flex gap-4 mb-4">
-                            <button onClick={() => update('gummiband', 'ja')} className={`choice-button ${formData.gummiband === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('gummiband', 'nein')} className={`choice-button ${formData.gummiband === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                        {formData.gummiband === 'ja' && (
-                            <>
-                                <div className="options-grid mb-3">
-                                    {gummibandFarben.map(g => (
-                                        <div key={g.id} onClick={() => update('gummibandFarbe', g.id)}
-                                            className={`option-card ${formData.gummibandFarbe === g.id ? 'active' : ''}`}>
-                                            <div className="option-image-container">
-                                                <img
-                                                    src={BILDER.gummiband.default}
-                                                    alt={g.name}
-                                                    onLoad={(e) => {
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                    onError={(e) => {
-                                                        e.target.src = BILDER.default;
-                                                        e.target.classList.add('loaded');
-                                                        e.target.parentElement.classList.add('has-image');
-                                                    }}
-                                                />
-                                                {formData.gummibandFarbe === g.id && <div className="option-checkmark">✓</div>}
-                                            </div>
-                                            <div className="option-label">{g.name}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <input type="text" value={formData.gummibandCustom || ''} onChange={e => update('gummibandCustom', e.target.value)} placeholder="Wunschfarbe" className="input-field" />
-                            </>
-                        )}
-                    </TwoColumnField>
-
-                    <TwoColumnField label="Aufkleber?">
-                        <div className="flex gap-4 mb-4">
-                            <button onClick={() => update('aufkleber', 'ja')} className={`choice-button ${formData.aufkleber === 'ja' ? 'active' : ''}`}>Ja</button>
-                            <button onClick={() => update('aufkleber', 'nein')} className={`choice-button ${formData.aufkleber === 'nein' ? 'active' : ''}`}>Nein</button>
-                        </div>
-                        {formData.aufkleber === 'ja' && (
-                            <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-                                <div className="options-grid mb-4">
-                                    <div className="option-card" style={{ cursor: 'default', opacity: 0.6 }}>
-                                        <div className="option-image-container">
-                                            <img
-                                                src={BILDER.aufkleber.default}
-                                                alt="Aufkleber Beispiel"
-                                                onLoad={(e) => {
-                                                    e.target.classList.add('loaded');
-                                                    e.target.parentElement.classList.add('has-image');
-                                                }}
-                                                onError={(e) => {
-                                                    e.target.src = BILDER.default;
-                                                    e.target.classList.add('loaded');
-                                                    e.target.parentElement.classList.add('has-image');
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="option-label">Aufkleber Vorschau</div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block mb-2 font-medium text-sm">Größe des Aufklebers:</label>
-                                    <input type="text" value={formData.aufkleberGroesse || ''} onChange={e => update('aufkleberGroesse', e.target.value)} placeholder="z.B. 50x50mm" className="input-field" />
-                                </div>
-                                <div>
-                                    <label className="block mb-2 font-medium text-sm">Anbringen:</label>
-                                    <select value={formData.aufkleberAnbringen || ''} onChange={e => update('aufkleberAnbringen', e.target.value)} className="input-field">
-                                        <option value="">Bitte wählen...</option>
-                                        <option value="Vorderseite">Vorderseite</option>
-                                        <option value="Rückseite">Rückseite</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block mb-2 font-medium text-sm">Form:</label>
-                                    <select value={formData.aufkleberForm || ''} onChange={e => update('aufkleberForm', e.target.value)} className="input-field">
-                                        <option value="">Bitte wählen...</option>
-                                        <option value="Rund">Rund</option>
-                                        <option value="Eckig">Eckig</option>
-                                        <option value="Oval">Oval</option>
-                                        <option value="Individuell">Individuell</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block mb-2 font-medium text-sm">Material:</label>
-                                    <select value={formData.aufkleberMaterial || ''} onChange={e => update('aufkleberMaterial', e.target.value)} className="input-field">
-                                        <option value="">Bitte wählen...</option>
-                                        <option value="Papier matt">Papier matt</option>
-                                        <option value="Papier glänzend">Papier glänzend</option>
-                                        <option value="Folie transparent">Folie transparent</option>
-                                        <option value="Folie weiß">Folie weiß</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block mb-2 font-medium text-sm">Farbigkeit:</label>
-                                    <select value={formData.aufkleberFarbigkeit || ''} onChange={e => update('aufkleberFarbigkeit', e.target.value)} className="input-field">
-                                        <option value="">Bitte wählen...</option>
-                                        <option value="1-farbig">1-farbig</option>
-                                        <option value="4-farbig CMYK">4-farbig CMYK</option>
-                                        <option value="5-farbig CMYK + HKS">5-farbig CMYK + HKS</option>
-                                    </select>
-                                </div>
+                    {showRegisterstanzung && (
+                        <TwoColumnField label="Registerstanzung Buchblock?">
+                            <div className="flex gap-4 mb-4">
+                                <button onClick={() => update('registerstanzung', 'ja')} className={`choice-button ${formData.registerstanzung === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('registerstanzung', 'nein')} className={`choice-button ${formData.registerstanzung === 'nein' ? 'active' : ''}`}>Nein</button>
                             </div>
-                        )}
-                    </TwoColumnField>
+                            {formData.registerstanzung === 'ja' && (
+                                <>
+                                    <div className="options-grid mb-4">
+                                        {[
+                                            { id: 'Wunschstanzung hier notieren', name: 'Wunschstanzung\nhier notieren' },
+                                            { id: 'Winkelschnitt (verschiedene Winkel)', name: 'Winkelschnitt\n(verschiedene Winkel)' },
+                                            { id: 'Treppenschnitt', name: 'Treppenschnitt' },
+                                            { id: 'Daumenregister', name: 'Daumenregister' }
+                                        ].map(r => (
+                                            <div key={r.id} onClick={() => update('registerstanzungTyp', r.id)}
+                                                className={`option-card ${formData.registerstanzungTyp === r.id ? 'active' : ''}`}>
+                                                <div className="option-image-container">
+                                                    <img
+                                                        src={BILDER.registerstanzung.default}
+                                                        alt={r.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.registerstanzungTyp === r.id && <div className="option-checkmark">✓</div>}
+                                                </div>
+                                                <div className="option-label" style={{ whiteSpace: 'pre-line' }}>{r.name}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <label className="block mb-2 font-medium text-sm">Bitte Wunsch beschreiben:</label>
+                                    <textarea
+                                        value={formData.registerstanzungWunsch || ''}
+                                        onChange={e => update('registerstanzungWunsch', e.target.value)}
+                                        placeholder="z.B. Anzahl Register, Beschriftung, Position..."
+                                        className="input-field"
+                                        style={{ minHeight: '80px' }}
+                                    />
+                                </>
+                            )}
+                        </TwoColumnField>
+                    )}
+
+                    {showGummiband && (
+                        <TwoColumnField label="Gummiband?">
+                            <div className="flex gap-4 mb-4">
+                                <button onClick={() => update('gummiband', 'ja')} className={`choice-button ${formData.gummiband === 'ja' ? 'active' : ''}`}>Ja</button>
+                                <button onClick={() => update('gummiband', 'nein')} className={`choice-button ${formData.gummiband === 'nein' ? 'active' : ''}`}>Nein</button>
+                            </div>
+                            {formData.gummiband === 'ja' && (
+                                <>
+                                    <div className="options-grid mb-3">
+                                        {gummibandFarben.map(g => (
+                                            <div key={g.id} onClick={() => update('gummibandFarbe', g.id)}
+                                                className={`option-card ${formData.gummibandFarbe === g.id ? 'active' : ''}`}>
+                                                <div className="option-image-container">
+                                                    <img
+                                                        src={BILDER.gummiband.default}
+                                                        alt={g.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.gummibandFarbe === g.id && <div className="option-checkmark">✓</div>}
+                                                </div>
+                                                <div className="option-label">{g.name}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <input type="text" value={formData.gummibandCustom || ''} onChange={e => update('gummibandCustom', e.target.value)} placeholder="Wunschfarbe" className="input-field" />
+                                </>
+                            )}
+                        </TwoColumnField>
+                    )}
 
                     <div className="mb-6"><label className="block font-medium mb-2">Anmerkungen:</label><textarea value={a} onChange={e => { setA(e.target.value); add('step8', e.target.value); }} placeholder="Ihre Anmerkungen" className="input-field" style={{ minHeight: '96px' }} /></div>
                     <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4"><p className="text-sm text-blue-800">💡 Wenn Sie jetzt "Rückruf vereinbaren" klicken, senden wir Ihre bisherigen Angaben an unser Team.</p></div>
@@ -4403,14 +4855,11 @@
 
             const druckSchutzumschlagOpts = [
                 { id: 'Unbedruckt', name: 'Unbedruckt' },
-                { id: '1/0', name: '1/0' },
+                { id: '1/0', name: '1/0 Schwarz' },
                 { id: '2/0 Schwarz + HKS/Pantone', name: '2/0 Schwarz + HKS/Pantone' },
                 { id: '4/0 CMYK', name: '4/0 CMYK' },
                 { id: '5/0 CMYK + HKS/Pantone', name: '5/0 CMYK + HKS/Pantone' },
-                { id: '1/1 (Schwarz)', name: '1/1 (Schwarz)' },
-                { id: '2/2 Schwarz + HKS/Pantone', name: '2/2 Schwarz + HKS/Pantone' },
-                { id: '4/4 CMYK', name: '4/4 CMYK' },
-                { id: '5/5 CMYK + HKS/Pantone', name: '5/5 CMYK + HKS/Pantone' }
+                { id: '6/0 CMYK + 2x HKS/Pantone', name: '6/0 CMYK + 2x HKS/Pantone' }
             ];
 
             return (
@@ -4490,6 +4939,122 @@
                                 </div>
                             )}
                         </TwoColumnField>
+                    )}
+
+                    {formData.schutzumschlag === 'ja' && formData.druckSchutzumschlag === 'ja' && (
+                        <>
+                            <TwoColumnField label="Folienkaschierung Schutzumschlag?">
+                                <div className="flex gap-4 mb-4">
+                                    <button onClick={() => update('folienkaschierungSchutzumschlag', 'ja')} className={`choice-button ${formData.folienkaschierungSchutzumschlag === 'ja' ? 'active' : ''}`}>Ja</button>
+                                    <button onClick={() => update('folienkaschierungSchutzumschlag', 'nein')} className={`choice-button ${formData.folienkaschierungSchutzumschlag === 'nein' ? 'active' : ''}`}>Nein</button>
+                                </div>
+                                {formData.folienkaschierungSchutzumschlag === 'ja' && (
+                                    <div className="options-grid">
+                                        {[
+                                            { id: 'Matt', name: 'Matt' },
+                                            { id: 'Glänzend', name: 'Glänzend' },
+                                            { id: 'Soft-Touch', name: 'Soft-Touch' }
+                                        ].map(f => (
+                                            <div key={f.id} onClick={() => update('folienkaschierungSchutzumschlagTyp', f.id)}
+                                                className={`option-card ${formData.folienkaschierungSchutzumschlagTyp === f.id ? 'active' : ''}`}>
+                                                <div className="option-image-container">
+                                                    <img
+                                                        src={BILDER.folie.default}
+                                                        alt={f.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.folienkaschierungSchutzumschlagTyp === f.id && <div className="option-checkmark">✓</div>}
+                                                </div>
+                                                <div className="option-label">{f.name}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </TwoColumnField>
+
+                            <TwoColumnField label="Lackierung Schutzumschlag?">
+                                <div className="flex gap-4 mb-4">
+                                    <button onClick={() => update('lackierungSchutzumschlag', 'ja')} className={`choice-button ${formData.lackierungSchutzumschlag === 'ja' ? 'active' : ''}`}>Ja</button>
+                                    <button onClick={() => update('lackierungSchutzumschlag', 'nein')} className={`choice-button ${formData.lackierungSchutzumschlag === 'nein' ? 'active' : ''}`}>Nein</button>
+                                </div>
+                                {formData.lackierungSchutzumschlag === 'ja' && (
+                                    <div className="options-grid">
+                                        {[
+                                            { id: 'Glanzlack', name: 'Glanzlack' },
+                                            { id: 'Mattlack', name: 'Mattlack' },
+                                            { id: 'UV-Lack', name: 'UV-Lack' },
+                                            { id: 'Hybrid-Lack', name: 'Hybrid-Lack' }
+                                        ].map(l => (
+                                            <div key={l.id} onClick={() => update('lackierungSchutzumschlagTyp', l.id)}
+                                                className={`option-card ${formData.lackierungSchutzumschlagTyp === l.id ? 'active' : ''}`}>
+                                                <div className="option-image-container">
+                                                    <img
+                                                        src={BILDER.lackierung.default}
+                                                        alt={l.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.lackierungSchutzumschlagTyp === l.id && <div className="option-checkmark">✓</div>}
+                                                </div>
+                                                <div className="option-label">{l.name}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </TwoColumnField>
+
+                            <TwoColumnField label="Prägung Schutzumschlag?">
+                                <div className="flex gap-4 mb-4">
+                                    <button onClick={() => update('praegungSchutzumschlag', 'ja')} className={`choice-button ${formData.praegungSchutzumschlag === 'ja' ? 'active' : ''}`}>Ja</button>
+                                    <button onClick={() => update('praegungSchutzumschlag', 'nein')} className={`choice-button ${formData.praegungSchutzumschlag === 'nein' ? 'active' : ''}`}>Nein</button>
+                                </div>
+                                {formData.praegungSchutzumschlag === 'ja' && (
+                                    <div className="options-grid">
+                                        {[
+                                            { id: 'Blindprägung', name: 'Blindprägung' },
+                                            { id: 'Folienprägung', name: 'Folienprägung' },
+                                            { id: 'Reliefprägung', name: 'Reliefprägung' }
+                                        ].map(p => (
+                                            <div key={p.id} onClick={() => update('praegungSchutzumschlagTyp', p.id)}
+                                                className={`option-card ${formData.praegungSchutzumschlagTyp === p.id ? 'active' : ''}`}>
+                                                <div className="option-image-container">
+                                                    <img
+                                                        src={BILDER.praegung.default}
+                                                        alt={p.name}
+                                                        onLoad={(e) => {
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                        onError={(e) => {
+                                                            e.target.src = BILDER.default;
+                                                            e.target.classList.add('loaded');
+                                                            e.target.parentElement.classList.add('has-image');
+                                                        }}
+                                                    />
+                                                    {formData.praegungSchutzumschlagTyp === p.id && <div className="option-checkmark">✓</div>}
+                                                </div>
+                                                <div className="option-label">{p.name}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </TwoColumnField>
+                        </>
                     )}
 
                     <div className="mb-6"><label className="block font-medium mb-2">Anmerkungen:</label><textarea value={a} onChange={e => { setA(e.target.value); add('step9', e.target.value); }} placeholder="Ihre Anmerkungen" className="input-field" style={{ minHeight: '96px' }} /></div>
